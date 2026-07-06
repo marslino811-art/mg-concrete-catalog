@@ -704,3 +704,50 @@ footer {
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 8px;
 }
+/* ==================================================
+   SHOW FULL PRODUCT IMAGE IN CATALOG CARDS
+   الصورة تظهر كاملة بدون قص
+================================================== */
+
+.product-image {
+  background: #111923 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+.product-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  display: block !important;
+  cursor: zoom-in !important;
+}
+
+/* الكمبيوتر */
+@media (min-width: 601px) {
+  .product-image {
+    height: 230px !important;
+    padding: 8px !important;
+  }
+}
+
+/* الموبايل */
+@media (max-width: 600px) {
+  .product-image {
+    height: 280px !important;
+    padding: 8px !important;
+  }
+
+  .product-image img {
+    object-fit: contain !important;
+  }
+
+  .image-modal-img {
+    object-fit: contain !important;
+    max-width: 96vw !important;
+    max-height: 86vh !important;
+  }
+}
