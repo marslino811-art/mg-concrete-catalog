@@ -1,0 +1,87 @@
+[
+  {
+    "id": 1,
+    "code": "1",
+    "name": "فازات بوهيمى",
+    "category": "منتجات",
+    "price_without_finish": 250.0,
+    "price_finished": 500.0,
+    "image": "images/product_1_1.jpeg",
+    "images": [
+      "images/product_1_1.jpeg"
+    ],
+    "stock_qty": 4.0,
+    "stock_status": "متوفر"
+  },
+  {
+    "id": 3,
+    "code": "3",
+    "name": "منظم ميكب دائرى",
+    "category": "منتجات",
+    "price_without_finish": 200.0,
+    "price_finished": 400.0,
+    "image": "images/product_3_1.jpeg",
+    "images": [
+      "images/product_3_1.jpeg"
+    ],
+    "stock_qty": 1.0,
+    "stock_status": "قارب على النفاد"
+  },
+  {
+    "id": 4,
+    "code": "4",
+    "name": "منظم ميكب عادى",
+    "category": "منتجات",
+    "price_without_finish": 200.0,
+    "price_finished": 400.0,
+    "image": "images/product_4_1.jpeg",
+    "images": [
+      "images/product_4_1.jpeg"
+    ],
+    "stock_qty": 16.0,
+    "stock_status": "متوفر"
+  },
+  {
+    "id": 5,
+    "code": "5",
+    "name": "طقم رجل التنوره 3 قطع",
+    "category": "منتجات",
+    "price_without_finish": 150.0,
+    "price_finished": 300.0,
+    "image": "images/product_5_1.jpeg",
+    "images": [
+      "images/product_5_1.jpeg",
+      "images/product_5_2.jpeg"
+    ],
+    "stock_qty": 10.0,
+    "stock_status": "متوفر"
+  },
+  {
+    "id": 6,
+    "code": "6",
+    "name": "البنت الافريقية",
+    "category": "منتجات",
+    "price_without_finish": 75.0,
+    "price_finished": 225.0,
+    "image": "images/product_6_1.jpeg",
+    "images": [
+      "images/product_6_1.jpeg"
+    ],
+    "stock_qty": 10.0,
+    "stock_status": "متوفر"
+  },
+  {
+    "id": 7,
+    "code": "7",
+    "name": "فازه زلط",
+    "category": "منتجات",
+    "price_without_finish": 45.0,
+    "price_finished": 135.0,
+    "image": "images/product_7_1.jpeg",
+    "images": [
+      "images/product_7_1.jpeg"
+    ],
+    "stock_qty": 30.0,
+    "stock_status": "متوفر"
+  }
+]
