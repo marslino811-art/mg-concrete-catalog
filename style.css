@@ -414,3 +414,199 @@ footer {
     height: 160px;
   }
 }
+/* ==================================================
+   MOBILE CATALOG DESIGN FIX - MG Concrete
+   تحسين شكل الكتالوج على الموبايل
+================================================== */
+@media (max-width: 600px) {
+
+  body {
+    font-size: 14px !important;
+  }
+
+  .header,
+  header {
+    padding: 18px 14px !important;
+  }
+
+  .brand,
+  .header-content {
+    gap: 12px !important;
+  }
+
+  .brand h1,
+  header h1 {
+    font-size: 26px !important;
+    line-height: 1.2 !important;
+  }
+
+  .brand p,
+  header p {
+    font-size: 14px !important;
+  }
+
+  .logo,
+  .brand-logo {
+    width: 58px !important;
+    height: 58px !important;
+    font-size: 24px !important;
+    border-radius: 16px !important;
+  }
+
+  main,
+  .container {
+    width: 100% !important;
+    padding: 14px 10px !important;
+    max-width: 100% !important;
+  }
+
+  .intro,
+  .hero,
+  .choose-card {
+    padding: 18px 16px !important;
+    margin: 14px auto 16px auto !important;
+    border-radius: 20px !important;
+    text-align: right !important;
+  }
+
+  .intro h2,
+  .hero h2,
+  .choose-card h2 {
+    font-size: 22px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .intro p,
+  .hero p,
+  .choose-card p {
+    font-size: 15px !important;
+    line-height: 1.8 !important;
+  }
+
+  #products,
+  .products-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .product-card {
+    width: 100% !important;
+    max-width: 390px !important;
+    margin: 0 auto 18px auto !important;
+    border-radius: 22px !important;
+    overflow: hidden !important;
+  }
+
+  .product-image {
+    height: 265px !important;
+    padding: 0 !important;
+    background: #111923 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+  }
+
+  .product-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+  }
+
+  .placeholder {
+    height: 265px !important;
+    font-size: 14px !important;
+  }
+
+  .image-thumbs {
+    padding: 8px 10px !important;
+    gap: 7px !important;
+  }
+
+  .image-thumb {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 10px !important;
+  }
+
+  .product-body {
+    padding: 14px !important;
+  }
+
+  .product-top {
+    margin-bottom: 10px !important;
+  }
+
+  .product-title {
+    font-size: 21px !important;
+    line-height: 1.4 !important;
+  }
+
+  .category {
+    font-size: 11px !important;
+    padding: 5px 10px !important;
+    border-radius: 999px !important;
+  }
+
+  .prices {
+    gap: 10px !important;
+    margin: 10px 0 12px 0 !important;
+  }
+
+  .price-box {
+    padding: 10px 8px !important;
+    border-radius: 14px !important;
+    min-height: 72px !important;
+  }
+
+  .price-box span {
+    font-size: 12px !important;
+  }
+
+  .price-box strong {
+    font-size: 16px !important;
+  }
+
+  .controls {
+    display: grid !important;
+    grid-template-columns: 1.8fr 0.8fr !important;
+    gap: 10px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .controls select,
+  .controls input {
+    height: 48px !important;
+    font-size: 15px !important;
+    border-radius: 14px !important;
+  }
+
+  .add-btn {
+    height: 52px !important;
+    font-size: 16px !important;
+    border-radius: 15px !important;
+  }
+
+  .cart-section,
+  #cart-section {
+    margin: 20px 10px !important;
+    padding: 16px !important;
+    border-radius: 20px !important;
+  }
+
+  .customer-form input,
+  .customer-form textarea {
+    font-size: 15px !important;
+    border-radius: 14px !important;
+  }
+
+  .send-whatsapp,
+  #send-whatsapp {
+    height: 52px !important;
+    font-size: 16px !important;
+    border-radius: 15px !important;
+  }
+}
