@@ -18,6 +18,9 @@ const cartCount = document.getElementById("cart-count");
 const orderTotal = document.getElementById("order-total");
 const sendWhatsappBtn = document.getElementById("send-whatsapp");
 
+// --- Floating Cart Button ---
+let floatingCartBtn = null;
+
 // --- Image Modal ---
 let imageModal = null;
 let modalImg = null;
@@ -83,6 +86,39 @@ async function loadProducts() {
   }
 
   renderProducts();
+}
+
+function showToast(message) {
+  const toast = document.createElement('div');
+  toast.className = 'toast-message';
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  // Animate in
+  setTimeout(() => {
+    toast.style.opacity = '1';
+    toast.style.transform = 'translate(-50%, 0)';
+  }, 10);
+
+  // Animate out and remove
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translate(-50%, 50px)';
+    setTimeout(() => {
+      if (document.body.contains(toast)) {
+        document.body.removeChild(toast);
+      }
+    }, 500);
+  }, 3000);
+}
+
+function initFloatingCartButton() {
+    const btnHTML = `<button type="button" class="floating-cart-btn" id="floating-cart-btn" style="display: none;">عرض الطلب (<span id="floating-cart-count">0</span>)</button>`;
+    document.body.insertAdjacentHTML('beforeend', btnHTML);
+    floatingCartBtn = document.getElementById('floating-cart-btn');
+    floatingCartBtn.onclick = () => {
+        document.getElementById("cart-section").scrollIntoView({ behavior: "smooth", block: "start" });
+    };
 }
 
 function initImageModal() {
@@ -328,7 +364,7 @@ function addToCart(productId) {
   });
 
   renderCart();
-  document.getElementById("cart-section").scrollIntoView({ behavior: "smooth", block: "start" });
+  showToast("تمت إضافة المنتج للطلب ✅");
 }
 
 function removeFromCart(index) {
@@ -342,6 +378,17 @@ function renderCart() {
 
   cartCount.textContent = `${totalQty} منتج`;
   orderTotal.textContent = money(total);
+
+  // Update floating cart button
+  if (floatingCartBtn) {
+      const floatingCartCount = document.getElementById('floating-cart-count');
+      if (cart.length > 0) {
+          floatingCartBtn.style.display = 'flex';
+          if (floatingCartCount) floatingCartCount.textContent = totalQty;
+      } else {
+          floatingCartBtn.style.display = 'none';
+      }
+  }
 
   if (cart.length === 0) {
     cartItemsContainer.className = "cart-items empty-cart";
@@ -399,3 +446,4 @@ function sendToWhatsapp() {
 sendWhatsappBtn.addEventListener("click", sendToWhatsapp);
 loadProducts();
 initImageModal();
+initFloatingCartButton();
