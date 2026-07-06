@@ -112,8 +112,8 @@ function initImageModal() {
             closeImageModal();
         }
     };
-    modalNextBtn.onclick = () => navigateModalImage(1);
-    modalPrevBtn.onclick = () => navigateModalImage(-1);
+    modalNextBtn.onclick = () => changeModalImage(1);
+    modalPrevBtn.onclick = () => changeModalImage(-1);
 }
 
 function handleEscKey(e) {
@@ -128,7 +128,7 @@ function closeImageModal() {
     currentModalProduct = null;
 }
 
-function updateModalContent() {
+function updateImageModal() {
     if (!currentModalProduct) return;
     const images = getProductImages(currentModalProduct);
     if (images.length === 0) {
@@ -149,21 +149,25 @@ function updateModalContent() {
     }
 }
 
-function navigateModalImage(direction) {
+function changeModalImage(direction) {
     if (!currentModalProduct) return;
     const images = getProductImages(currentModalProduct);
     if (images.length <= 1) return;
     currentModalImageIndex = (currentModalImageIndex + direction + images.length) % images.length;
-    updateModalContent();
+    updateImageModal();
 }
 
-function openImageModal(productId) {
+function openImageModal(productId, imageIndex) {
     currentModalProduct = products.find(p => String(p.id) === String(productId));
     if (!currentModalProduct) return;
-    currentModalImageIndex = getCurrentImageIndex(currentModalProduct);
+    if (typeof imageIndex === 'number') {
+        currentModalImageIndex = imageIndex;
+    } else {
+        currentModalImageIndex = getCurrentImageIndex(currentModalProduct);
+    }
     if (imageModal) imageModal.style.display = 'flex';
     document.addEventListener('keydown', handleEscKey);
-    updateModalContent();
+    updateImageModal();
 }
 
 function getCurrentImageIndex(product) {
@@ -258,13 +262,13 @@ function renderProducts() {
     card.className = "product-card";
 
     card.innerHTML = `
-      <div class="product-image" onclick="openImageModal('${product.id}')">
+      <div class="product-image">
         ${currentImage ? `
-          <img id="product-img-${product.id}" src="${escapeHtml(currentImage)}" alt="${escapeHtml(product.name)}" onerror="this.style.display='none'; document.getElementById('placeholder-${product.id}').style.display='grid';" />
-          <div class="placeholder" id="placeholder-${product.id}" style="display:none;">صورة المنتج</div>
+          <img id="product-img-${product.id}" src="${escapeHtml(currentImage)}" alt="${escapeHtml(product.name)}" onclick="openImageModal('${product.id}')" onerror="this.style.display='none'; document.getElementById('placeholder-${product.id}').style.display='grid';" />
+          <div class="placeholder" id="placeholder-${product.id}" style="display:none;" onclick="openImageModal('${product.id}')">صورة المنتج</div>
         ` : `
           <img id="product-img-${product.id}" src="" alt="${escapeHtml(product.name)}" style="display:none;" />
-          <div class="placeholder" id="placeholder-${product.id}" style="display:grid;">صورة المنتج</div>
+          <div class="placeholder" id="placeholder-${product.id}" style="display:grid;" onclick="openImageModal('${product.id}')">صورة المنتج</div>
         `}
         ${galleryButtons}
       </div>
