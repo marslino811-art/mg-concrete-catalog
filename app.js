@@ -18,6 +18,16 @@ const cartCount = document.getElementById("cart-count");
 const orderTotal = document.getElementById("order-total");
 const sendWhatsappBtn = document.getElementById("send-whatsapp");
 
+// --- Image Modal ---
+let imageModal = null;
+let modalImg = null;
+let modalCloseBtn = null;
+let modalNextBtn = null;
+let modalPrevBtn = null;
+let modalCounter = null;
+let currentModalProduct = null;
+let currentModalImageIndex = 0;
+
 function money(value) {
   return `${Number(value || 0).toFixed(2)} جنيه`;
 }
@@ -73,6 +83,87 @@ async function loadProducts() {
   }
 
   renderProducts();
+}
+
+function initImageModal() {
+    const modalHTML = `
+        <div class="image-modal" id="image-modal" style="display: none;">
+            <span class="image-modal-close" id="image-modal-close">&times;</span>
+            <button type="button" class="image-modal-nav prev" id="image-modal-prev" aria-label="Previous">‹</button>
+            <div class="image-modal-content">
+                <img src="" alt="Product Image" class="image-modal-img" id="image-modal-img">
+            </div>
+            <button type="button" class="image-modal-nav next" id="image-modal-next" aria-label="Next">›</button>
+            <div class="image-modal-counter" id="image-modal-counter"></div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    imageModal = document.getElementById('image-modal');
+    modalImg = document.getElementById('image-modal-img');
+    modalCloseBtn = document.getElementById('image-modal-close');
+    modalNextBtn = document.getElementById('image-modal-next');
+    modalPrevBtn = document.getElementById('image-modal-prev');
+    modalCounter = document.getElementById('image-modal-counter');
+
+    modalCloseBtn.onclick = closeImageModal;
+    imageModal.onclick = (e) => {
+        if (e.target === imageModal) {
+            closeImageModal();
+        }
+    };
+    modalNextBtn.onclick = () => navigateModalImage(1);
+    modalPrevBtn.onclick = () => navigateModalImage(-1);
+}
+
+function handleEscKey(e) {
+    if (e.key === 'Escape') {
+        closeImageModal();
+    }
+}
+
+function closeImageModal() {
+    if (imageModal) imageModal.style.display = 'none';
+    document.removeEventListener('keydown', handleEscKey);
+    currentModalProduct = null;
+}
+
+function updateModalContent() {
+    if (!currentModalProduct) return;
+    const images = getProductImages(currentModalProduct);
+    if (images.length === 0) {
+        closeImageModal();
+        return;
+    }
+    currentModalImageIndex = Math.max(0, Math.min(currentModalImageIndex, images.length - 1));
+    modalImg.src = images[currentModalImageIndex];
+    if (images.length > 1) {
+        modalCounter.textContent = `${currentModalImageIndex + 1} / ${images.length}`;
+        modalCounter.style.display = 'block';
+        modalNextBtn.style.display = 'block';
+        modalPrevBtn.style.display = 'block';
+    } else {
+        modalCounter.style.display = 'none';
+        modalNextBtn.style.display = 'none';
+        modalPrevBtn.style.display = 'none';
+    }
+}
+
+function navigateModalImage(direction) {
+    if (!currentModalProduct) return;
+    const images = getProductImages(currentModalProduct);
+    if (images.length <= 1) return;
+    currentModalImageIndex = (currentModalImageIndex + direction + images.length) % images.length;
+    updateModalContent();
+}
+
+function openImageModal(productId) {
+    currentModalProduct = products.find(p => String(p.id) === String(productId));
+    if (!currentModalProduct) return;
+    currentModalImageIndex = getCurrentImageIndex(currentModalProduct);
+    if (imageModal) imageModal.style.display = 'flex';
+    document.addEventListener('keydown', handleEscKey);
+    updateModalContent();
 }
 
 function getCurrentImageIndex(product) {
@@ -167,7 +258,7 @@ function renderProducts() {
     card.className = "product-card";
 
     card.innerHTML = `
-      <div class="product-image">
+      <div class="product-image" onclick="openImageModal('${product.id}')">
         ${currentImage ? `
           <img id="product-img-${product.id}" src="${escapeHtml(currentImage)}" alt="${escapeHtml(product.name)}" onerror="this.style.display='none'; document.getElementById('placeholder-${product.id}').style.display='grid';" />
           <div class="placeholder" id="placeholder-${product.id}" style="display:none;">صورة المنتج</div>
@@ -303,3 +394,4 @@ function sendToWhatsapp() {
 
 sendWhatsappBtn.addEventListener("click", sendToWhatsapp);
 loadProducts();
+initImageModal();
