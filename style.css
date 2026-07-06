@@ -820,3 +820,59 @@ footer {
     min-height: 360px !important;
   }
 }
+
+/* --- Toast Message --- */
+.toast-message {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translate(-50%, 50px);
+  background-color: #0b2d4d;
+  color: white;
+  padding: 14px 22px;
+  border-radius: 50px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 2000;
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* --- Floating Cart Button --- */
+.floating-cart-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #16a34a; /* WhatsApp Green */
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  z-index: 1500;
+  display: none; /* Initially hidden */
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s;
+}
+
+.floating-cart-btn:hover {
+  background-color: #128c3a;
+}
+
+@media (max-width: 600px) {
+  .floating-cart-btn {
+    padding: 14px 28px;
+    font-size: 17px;
+    min-width: 200px;
+    justify-content: center;
+  }
+  .toast-message {
+    bottom: 95px; /* Position above floating cart button */
+  }
+}
