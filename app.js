@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "201000000000"; // غير الرقم ده لرقمك: 20 + رقمك بدون أول صفر
+const WHATSAPP_NUMBER = "201277503326"; // غير الرقم ده لرقمك: 20 + رقمك بدون أول صفر
 
 const fallbackProducts = [
   { id: 1, name: "فازة صغيرة", category: "فازات", price_without_finish: 60, price_finished: 120, image: "images/product1.jpg", images: ["images/product1.jpg"] },
