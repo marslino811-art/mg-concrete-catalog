@@ -1,0 +1,24 @@
+import sqlite3
+
+db = r"C:\Users\MARSLINO\Desktop\mg concrete\database\mg_concrete.db"
+
+conn = sqlite3.connect(db)
+cur = conn.cursor()
+
+print("TABLES:")
+for row in cur.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"):
+    print(row)
+
+print("\nPRODUCTS COLUMNS:")
+print(cur.execute("PRAGMA table_info(products)").fetchall())
+
+print("\nPRODUCTS ROWS:")
+print(cur.execute("SELECT * FROM products LIMIT 10").fetchall())
+
+print("\nINVENTORY PRODUCT PRICING COLUMNS:")
+print(cur.execute("PRAGMA table_info(inventory_product_pricing)").fetchall())
+
+print("\nINVENTORY PRODUCT PRICING ROWS:")
+print(cur.execute("SELECT * FROM inventory_product_pricing LIMIT 10").fetchall())
+
+conn.close()
