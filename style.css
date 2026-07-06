@@ -103,7 +103,6 @@ h1, h2, p {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  cursor: zoom-in;
 }
 
 .product-image img,
@@ -115,6 +114,7 @@ h1, h2, p {
   object-position: center center;
   display: block;
   padding: 6px;
+  cursor: zoom-in;
 }
 
 .placeholder {
@@ -126,6 +126,7 @@ h1, h2, p {
   font-size: 15px;
   font-weight: 700;
   background: linear-gradient(135deg, #eef2f7, #dbeafe);
+  cursor: zoom-in;
 }
 
 .gallery-nav {
