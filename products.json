@@ -4,6 +4,19 @@
     "code": "1",
     "name": "فازات بوهيمى",
     "category": "اطقم",
+    "price_mode": "dual",
+    "price_options": [
+      {
+        "key": "without_finish",
+        "label": "بدون فينيش",
+        "price": 250.0
+      },
+      {
+        "key": "finished",
+        "label": "متفنش (متلون)",
+        "price": 500.0
+      }
+    ],
     "price_without_finish": 250.0,
     "price_finished": 500.0,
     "image": "images/product_1_1.jpeg",
@@ -20,8 +33,16 @@
     "code": "2",
     "name": "بودر ماربلينو",
     "category": "بودر",
+    "price_mode": "single",
+    "price_options": [
+      {
+        "key": "single",
+        "label": "السعر",
+        "price": 35.0
+      }
+    ],
     "price_without_finish": 35.0,
-    "price_finished": 105.0,
+    "price_finished": 0,
     "image": "",
     "images": [],
     "stock_qty": 0.0,
@@ -34,6 +55,19 @@
     "code": "3",
     "name": "منظم ميكب دائرى",
     "category": "اشكال",
+    "price_mode": "dual",
+    "price_options": [
+      {
+        "key": "without_finish",
+        "label": "بدون فينيش",
+        "price": 200.0
+      },
+      {
+        "key": "finished",
+        "label": "متفنش (متلون)",
+        "price": 400.0
+      }
+    ],
     "price_without_finish": 200.0,
     "price_finished": 400.0,
     "image": "images/product_3_1.jpeg",
@@ -50,6 +84,19 @@
     "code": "4",
     "name": "منظم ميكب عادى",
     "category": "اشكال",
+    "price_mode": "dual",
+    "price_options": [
+      {
+        "key": "without_finish",
+        "label": "بدون فينيش",
+        "price": 200.0
+      },
+      {
+        "key": "finished",
+        "label": "متفنش (متلون)",
+        "price": 400.0
+      }
+    ],
     "price_without_finish": 200.0,
     "price_finished": 400.0,
     "image": "images/product_4_1.jpeg",
@@ -66,6 +113,19 @@
     "code": "5",
     "name": "طقم رجل التنوره 3 قطع",
     "category": "اطقم",
+    "price_mode": "dual",
+    "price_options": [
+      {
+        "key": "without_finish",
+        "label": "بدون فينيش",
+        "price": 150.0
+      },
+      {
+        "key": "finished",
+        "label": "متفنش (متلون)",
+        "price": 300.0
+      }
+    ],
     "price_without_finish": 150.0,
     "price_finished": 300.0,
     "image": "images/product_5_1.jpeg",
@@ -83,6 +143,19 @@
     "code": "6",
     "name": "البنت الافريقية",
     "category": "اشكال",
+    "price_mode": "dual",
+    "price_options": [
+      {
+        "key": "without_finish",
+        "label": "بدون فينيش",
+        "price": 75.0
+      },
+      {
+        "key": "finished",
+        "label": "متفنش (متلون)",
+        "price": 225.0
+      }
+    ],
     "price_without_finish": 75.0,
     "price_finished": 225.0,
     "image": "images/product_6_1.jpeg",
@@ -99,6 +172,19 @@
     "code": "7",
     "name": "فازه زلط",
     "category": "فازات",
+    "price_mode": "dual",
+    "price_options": [
+      {
+        "key": "without_finish",
+        "label": "بدون فينيش",
+        "price": 45.0
+      },
+      {
+        "key": "finished",
+        "label": "متفنش (متلون)",
+        "price": 135.0
+      }
+    ],
     "price_without_finish": 45.0,
     "price_finished": 135.0,
     "image": "images/product_7_1.jpeg",
