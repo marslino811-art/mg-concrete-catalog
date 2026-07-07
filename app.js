@@ -436,7 +436,12 @@ function addToCart(productId) {
   const finishValue = productCardFinishes[productId] || (product.price_mode === 'single' ? 'single' : 'without_finish');
   const qty = productCardQuantities[productId] || 1;
 
-  const selectedOption = (product.price_options || []).find(opt => opt.key === finishValue) || (product.price_options || [])[0];
+  // Explicitly find the selected price option with a fallback
+  let selectedOption = (product.price_options || []).find(opt => opt.key === finishValue);
+  if (!selectedOption && product.price_options && product.price_options.length > 0) {
+      selectedOption = product.price_options[0];
+  }
+
   if (!selectedOption) {
       console.error("No price option found for product", productId);
       return;
