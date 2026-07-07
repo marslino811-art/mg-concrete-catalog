@@ -352,16 +352,29 @@ function addToCart(productId) {
 
   const finishLabel = finishValue === "finished" ? "Finished" : "Without Finish";
   const unitPrice = finishValue === "finished" ? product.price_finished : product.price_without_finish;
-  const lineTotal = unitPrice * qty;
 
-  cart.push({
-    productId: product.id,
-    name: product.name,
-    finish: finishLabel,
-    qty,
-    unitPrice,
-    lineTotal
-  });
+  // Check if the same product with the same finish and price already exists
+  const existingItem = cart.find(item =>
+    String(item.productId) === String(product.id) &&
+    item.finish === finishLabel &&
+    Number(item.unitPrice) === Number(unitPrice)
+  );
+
+  if (existingItem) {
+    // If found, just increase the quantity and recalculate the total
+    existingItem.qty += qty;
+    existingItem.lineTotal = existingItem.qty * existingItem.unitPrice;
+  } else {
+    // If not found, add a new item to the cart
+    cart.push({
+      productId: product.id,
+      name: product.name,
+      finish: finishLabel,
+      qty,
+      unitPrice,
+      lineTotal: unitPrice * qty
+    });
+  }
 
   renderCart();
   showToast("تمت إضافة المنتج للطلب ✅");
