@@ -443,7 +443,214 @@ function sendToWhatsapp() {
   window.open(url, "_blank");
 }
 
+// --- Order Card Image Generation ---
+
+function getMergedCartItems() {
+  const merged = {};
+  cart.forEach(item => {
+    // Key ensures that items with same product, finish, and price are grouped
+    const key = `${item.productId}-${item.finish}-${item.unitPrice}`;
+    if (merged[key]) {
+      merged[key].qty += item.qty;
+      // Recalculate line total for the merged item
+      merged[key].lineTotal = merged[key].qty * merged[key].unitPrice;
+    } else {
+      // Create a copy to avoid modifying the original cart item
+      merged[key] = { ...item };
+    }
+  });
+  return Object.values(merged);
+}
+
+function formatMoneySimple(value) {
+  return Number(value || 0).toFixed(2);
+}
+
+function generateOrderNumber() {
+  const now = new Date();
+  const YYYY = now.getFullYear();
+  const MM = String(now.getMonth() + 1).padStart(2, '0');
+  const DD = String(now.getDate()).padStart(2, '0');
+  const HH = String(now.getHours()).padStart(2, '0');
+  const MIN = String(now.getMinutes()).padStart(2, '0');
+  return `MG-${YYYY}${MM}${DD}-${HH}${MIN}`;
+}
+
+async function wrapArabicText(context, text, x, y, maxWidth, lineHeight) {
+  const lines = text.split('\n');
+  let currentY = y;
+  for (const singleLine of lines) {
+    const words = singleLine.split(' ');
+    let line = '';
+    for (let n = 0; n < words.length; n++) {
+      const testLine = line + words[n] + ' ';
+      const metrics = context.measureText(testLine);
+      if (metrics.width > maxWidth && n > 0) {
+        context.fillText(line, x, currentY);
+        line = words[n] + ' ';
+        currentY += lineHeight;
+      } else {
+        line = testLine;
+      }
+    }
+    context.fillText(line, x, currentY);
+    currentY += lineHeight;
+  }
+  return currentY;
+}
+
+async function canvasToFile(canvas, fileName = 'mg-concrete-order.png') {
+  return new Promise(resolve => {
+    canvas.toBlob(blob => {
+      resolve(new File([blob], fileName, { type: 'image/png' }));
+    }, 'image/png');
+  });
+}
+
+async function generateOrderCardCanvas() {
+  const mergedCart = getMergedCartItems();
+  if (mergedCart.length === 0) return null;
+
+  const customerName = document.getElementById("customer-name").value.trim() || "غير محدد";
+  const customerPhone = document.getElementById("customer-phone").value.trim() || "غير محدد";
+  const notes = document.getElementById("order-notes").value.trim() || "لا توجد";
+  const grandTotal = mergedCart.reduce((sum, item) => sum + item.lineTotal, 0);
+
+  // Estimate dynamic height
+  const tempCtx = document.createElement('canvas').getContext('2d');
+  tempCtx.font = '20px Arial';
+  const notesLines = (notes.split('\n').length) + Math.floor(tempCtx.measureText(notes).width / 800);
+  const dynamicHeight = 550 + (mergedCart.length * 40) + (notesLines * 30);
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 900;
+  canvas.height = dynamicHeight;
+  const ctx = canvas.getContext('2d');
+
+  // Background
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Header
+  ctx.fillStyle = '#0B2D4D';
+  ctx.fillRect(0, 0, canvas.width, 100);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = 'bold 42px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('MG Concrete', canvas.width / 2, 65);
+
+  let y = 160;
+  ctx.fillStyle = '#1F2937';
+  ctx.font = 'bold 32px Arial';
+  ctx.fillText('كارت طلب عميل', canvas.width / 2, y);
+  y += 60;
+
+  // Order Info
+  ctx.font = '22px Arial';
+  ctx.textAlign = 'right';
+  ctx.fillText(`رقم الطلب: ${generateOrderNumber()}`, 850, y);
+  ctx.fillText(`التاريخ: ${new Date().toLocaleDateString('ar-EG')}`, 850, y + 35);
+  ctx.fillText(`اسم العميل: ${customerName}`, 500, y);
+  ctx.fillText(`رقم الهاتف: ${customerPhone}`, 500, y + 35);
+  y += 80;
+
+  // Table Header
+  ctx.fillStyle = '#F3F4F6';
+  ctx.fillRect(50, y, 800, 40);
+  ctx.fillStyle = '#111827';
+  ctx.font = 'bold 20px Arial';
+  ctx.textAlign = 'right';
+  ctx.fillText('الصنف', 830, y + 28);
+  ctx.textAlign = 'center';
+  ctx.fillText('الكمية', 420, y + 28);
+  ctx.fillText('سعر الوحدة', 280, y + 28);
+  ctx.fillText('الإجمالي', 140, y + 28);
+  y += 55;
+
+  // Table Items
+  ctx.font = '20px Arial';
+  mergedCart.forEach(item => {
+    ctx.textAlign = 'right';
+    ctx.fillText(`${item.name} (${item.finish})`, 830, y);
+    ctx.textAlign = 'center';
+    ctx.fillText(item.qty, 420, y);
+    ctx.fillText(formatMoneySimple(item.unitPrice), 280, y);
+    ctx.fillText(formatMoneySimple(item.qty * item.unitPrice), 140, y);
+    y += 40;
+  });
+
+  ctx.fillStyle = '#E5E7EB';
+  ctx.fillRect(50, y - 15, 800, 2);
+  y += 20;
+
+  // Grand Total
+  ctx.fillStyle = '#10B981';
+  ctx.font = 'bold 26px Arial';
+  ctx.textAlign = 'right';
+  ctx.fillText('الإجمالي الكلي:', 850, y);
+  ctx.textAlign = 'left';
+  ctx.fillText(`${formatMoneySimple(grandTotal)} جنيه`, 250, y);
+  y += 60;
+
+  // Notes
+  ctx.fillStyle = '#1F2937';
+  ctx.font = 'bold 22px Arial';
+  ctx.textAlign = 'right';
+  ctx.fillText('ملاحظات:', 850, y);
+  y += 35;
+  ctx.font = '20px Arial';
+  y = await wrapArabicText(ctx, notes, 850, y, 800, 30);
+
+  // Footer
+  ctx.fillStyle = '#0B2D4D';
+  ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = '20px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('شكراً لاختيارك MG Concrete', canvas.width / 2, canvas.height - 20);
+
+  return canvas;
+}
+
+async function shareOrderCard() {
+  if (cart.length === 0) {
+    alert("لا يمكن مشاركة كارت طلب فارغ. ضيف منتجات الأول.");
+    return;
+  }
+
+  const canvas = await generateOrderCardCanvas();
+  if (!canvas) return;
+
+  const orderFile = await canvasToFile(canvas);
+  const shareData = {
+    files: [orderFile],
+    title: 'طلب جديد - MG Concrete',
+    text: 'طلب جديد من كتالوج MG Concrete',
+  };
+
+  if (navigator.canShare && navigator.canShare(shareData)) {
+    try {
+      await navigator.share(shareData);
+    } catch (err) {
+      console.error('Share failed:', err.message);
+    }
+  } else {
+    const link = document.createElement('a');
+    link.download = 'mg-concrete-order.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    alert('متصفحك لا يدعم المشاركة المباشرة للملفات.\n\nتم تحميل صورة الطلب. من فضلك أرسلها يدويًا على واتساب.');
+  }
+}
+
 sendWhatsappBtn.addEventListener("click", sendToWhatsapp);
 loadProducts();
 initImageModal();
 initFloatingCartButton();
+
+const shareCardBtn = document.createElement('button');
+shareCardBtn.id = 'share-order-card-btn';
+shareCardBtn.className = 'order-card-btn';
+shareCardBtn.textContent = '📸 مشاركة كارت الطلب';
+shareCardBtn.addEventListener('click', shareOrderCard);
+sendWhatsappBtn.after(shareCardBtn);
