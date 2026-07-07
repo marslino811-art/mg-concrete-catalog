@@ -11,6 +11,8 @@ const fallbackProducts = [
 let products = [];
 let cart = [];
 let productImageIndexes = {};
+let productCardQuantities = {};
+let productCardFinishes = {};
 
 const productsContainer = document.getElementById("products");
 const cartItemsContainer = document.getElementById("cart-items");
@@ -266,6 +268,34 @@ function chooseProductImage(productId, index) {
   updateProductImage(product.id);
 }
 
+function selectFinish(productId, finishValue) {
+    productCardFinishes[productId] = finishValue;
+    const optionsContainer = document.getElementById(`finish-options-${productId}`);
+    if (!optionsContainer) return;
+    const buttons = optionsContainer.querySelectorAll('.finish-option');
+    buttons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.finish === finishValue);
+    });
+}
+
+function changeCardQuantity(productId, change) {
+    const currentValue = productCardQuantities[productId] || 1;
+    const newValue = Math.max(1, currentValue + change);
+    productCardQuantities[productId] = newValue;
+    
+    const qtyValueEl = document.getElementById(`qty-value-${productId}`);
+    if (qtyValueEl) {
+        qtyValueEl.textContent = newValue;
+    }
+}
+
+function updateCartQuantity(index, change) {
+    if (!cart[index]) return;
+    cart[index].qty += change;
+    cart[index].lineTotal = cart[index].qty * cart[index].unitPrice;
+    if (cart[index].qty <= 0) removeFromCart(index); else renderCart();
+}
+
 function renderProducts() {
   productsContainer.innerHTML = "";
 
@@ -273,6 +303,8 @@ function renderProducts() {
     const images = getProductImages(product);
     const currentImage = images[0] || "";
     productImageIndexes[product.id] = 0;
+    productCardQuantities[product.id] = 1;
+    productCardFinishes[product.id] = 'without_finish';
 
     const galleryButtons = images.length > 1 ? `
       <button type="button" class="gallery-nav gallery-prev" onclick="changeProductImage('${product.id}', -1)" aria-label="الصورة السابقة">‹</button>
@@ -326,18 +358,22 @@ function renderProducts() {
           </div>
         </div>
 
-        <div class="controls">
-          <select id="finish-${product.id}">
-            <option value="without_finish">Without Finish</option>
-            <option value="finished">Finished</option>
-          </select>
-          <input id="qty-${product.id}" type="number" min="1" value="1" />
+        <div class="finish-options" id="finish-options-${product.id}">
+            <button class="finish-option active" data-finish="without_finish" onclick="selectFinish('${product.id}', 'without_finish')">بدون فينيش</button>
+            <button class="finish-option" data-finish="finished" onclick="selectFinish('${product.id}', 'finished')">متفنر</button>
         </div>
 
-        <button class="add-btn" onclick="addToCart('${product.id}')">➕ إضافة للطلب</button>
+        <div class="controls">
+            <div class="qty-stepper">
+                <button class="qty-btn" onclick="changeCardQuantity('${product.id}', -1)" aria-label="Decrease quantity">-</button>
+                <span class="qty-value" id="qty-value-${product.id}">1</span>
+                <button class="qty-btn" onclick="changeCardQuantity('${product.id}', 1)" aria-label="Increase quantity">+</button>
+            </div>
+            <button class="add-btn" onclick="addToCart('${product.id}')">➕ إضافة للطلب</button>
+        </div>
       </div>
     `;
-
+    
     productsContainer.appendChild(card);
   });
 }
@@ -346,9 +382,8 @@ function addToCart(productId) {
   const product = products.find((item) => String(item.id) === String(productId));
   if (!product) return;
 
-  const finishValue = document.getElementById(`finish-${product.id}`).value;
-  const qtyInput = document.getElementById(`qty-${product.id}`);
-  const qty = Math.max(1, Number(qtyInput.value || 1));
+  const finishValue = productCardFinishes[productId] || 'without_finish';
+  const qty = productCardQuantities[productId] || 1;
 
   const finishLabel = finishValue === "finished" ? "Finished" : "Without Finish";
   const unitPrice = finishValue === "finished" ? product.price_finished : product.price_without_finish;
@@ -375,6 +410,10 @@ function addToCart(productId) {
       lineTotal: unitPrice * qty
     });
   }
+
+  // Reset quantity on card to 1 after adding
+  productCardQuantities[productId] = 1;
+  document.getElementById(`qty-value-${productId}`).textContent = 1;
 
   renderCart();
   showToast("تمت إضافة المنتج للطلب ✅");
@@ -412,11 +451,21 @@ function renderCart() {
   cartItemsContainer.className = "cart-items";
   cartItemsContainer.innerHTML = cart.map((item, index) => `
     <div class="cart-item">
-      <strong>${escapeHtml(item.name)}</strong>
-      <small>النوع: ${escapeHtml(item.finish)}</small>
-      <small>الكمية: ${item.qty} × ${money(item.unitPrice)}</small>
-      <small>الإجمالي: ${money(item.lineTotal)}</small>
-      <button class="remove-btn" onclick="removeFromCart(${index})">حذف</button>
+        <div class="cart-item-header">
+            <div class="cart-item-details">
+                <strong>${escapeHtml(item.name)}</strong>
+                <small>النوع: ${escapeHtml(item.finish)}</small>
+            </div>
+            <button class="remove-btn" onclick="removeFromCart(${index})">حذف</button>
+        </div>
+        <div class="cart-item-footer">
+            <div class="cart-qty-controls">
+                <button class="qty-btn" onclick="updateCartQuantity(${index}, -1)" aria-label="Decrease quantity">-</button>
+                <span class="qty-value">${item.qty}</span>
+                <button class="qty-btn" onclick="updateCartQuantity(${index}, 1)" aria-label="Increase quantity">+</button>
+            </div>
+            <div class="cart-item-total">${money(item.lineTotal)}</div>
+        </div>
     </div>
   `).join("");
 }
