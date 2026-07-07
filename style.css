@@ -821,6 +821,35 @@ footer {
   }
 }
 
+/* --- Order Card Share Button --- */
+.order-card-btn {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 800;
+  background: #1e73e8; /* Blue like add-btn */
+  color: white;
+  margin-top: 8px; /* Space between buttons */
+}
+
+.order-card-btn:active {
+  transform: scale(0.99);
+}
+
+@media (max-width: 600px) {
+  .order-card-btn {
+    height: 52px !important;
+    font-size: 16px !important;
+    border-radius: 15px !important;
+  }
+  .whatsapp-btn {
+    margin-top: 0 !important;
+  }
+}
+
 /* --- Toast Message --- */
 .toast-message {
   position: fixed;
