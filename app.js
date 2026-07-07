@@ -116,6 +116,8 @@ function normalizeProducts(list) {
     return {
       ...product,
       id: productId,
+      size: product.size || "",
+      description: product.description || "",
       category: product.category || "منتجات",
       price_mode: priceMode,
       price_options: priceOptions,
@@ -474,6 +476,8 @@ function renderFilteredProducts() {
           <div class="product-title">${escapeHtml(product.name)}</div>
           <div class="category">${escapeHtml(product.category)}</div>
         </div>
+        ${product.description ? `<p class="product-description">${escapeHtml(product.description)}</p>` : ''}
+        ${product.size ? `<div class="product-size">المقاس: ${escapeHtml(product.size)}</div>` : ''}
         ${product.availability_label ? `<div class="availability-badge ${product.availability_type}">${escapeHtml(product.availability_label)}</div>` : ''}
 
         <div class="prices ${((product.price_options || []).length === 1) ? 'single-price' : 'dual-price'}" id="prices-${product.id}">
