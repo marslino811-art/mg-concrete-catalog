@@ -1127,3 +1127,45 @@ footer {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+/* ==================================================
+   Final catalog price mode layout
+   Supports: single / without only / finished only / dual
+================================================== */
+.prices.single-price {
+  grid-template-columns: 1fr !important;
+}
+
+.prices.single-price .price-box {
+  min-height: 78px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.prices.dual-price {
+  grid-template-columns: 1fr 1fr !important;
+}
+
+.price-box {
+  cursor: pointer !important;
+}
+
+.price-box.active {
+  border-color: #1e73e8 !important;
+  background-color: #eef2ff !important;
+}
+
+@media (max-width: 600px) {
+  .prices.single-price {
+    grid-template-columns: 1fr !important;
+  }
+
+  .prices.dual-price {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .prices.single-price .price-box {
+    min-height: 82px !important;
+  }
+}
