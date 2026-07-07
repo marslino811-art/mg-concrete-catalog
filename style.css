@@ -229,6 +229,27 @@ h1, h2, p {
   white-space: nowrap;
 }
 
+.availability-badge {
+  margin-top: 8px;
+  margin-bottom: 4px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-block;
+  width: fit-content;
+}
+
+.availability-badge.available {
+  background-color: #f0fdf4;
+  color: #15803d;
+}
+
+.availability-badge.made_to_order {
+  background-color: #fffbeb;
+  color: #b45309;
+}
+
 .prices {
   display: grid;
   grid-template-columns: 1fr 1fr;
