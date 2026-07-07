@@ -1258,6 +1258,7 @@ footer {
 .instagram-card { border-color: #E4405F; }
 .tiktok-card { border-color: #000000; }
 .whatsapp-card { border-color: #25D366; }
+.courses-card { border-color: #800080; } /* Purple accent for courses */
 
 /* Mobile Layout */
 @media (max-width: 600px) {
