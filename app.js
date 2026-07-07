@@ -611,6 +611,53 @@ function sendToWhatsapp() {
   window.open(url, "_blank");
 }
 
+function injectSocialSections() {
+  if (document.querySelector('.social-section')) return; // Guard against multiple injections
+
+  const socialLinks = [
+      { name: 'YouTube', icon: '▶️', url: 'https://www.youtube.com/@MG_Concrete' },
+      { name: 'Facebook', icon: '📘', url: 'https://www.facebook.com/groups/630006006204038/?ref=share&mibextid=NSMWBT' },
+      { name: 'TikTok', icon: '🎵', url: 'https://www.tiktok.com/@mg.candles1' },
+      { name: 'Instagram', icon: '📸', url: 'https://www.instagram.com/mg___candles/' },
+      { name: 'WhatsApp', icon: '💬', url: `https://wa.me/${WHATSAPP_NUMBER}` }
+  ];
+
+  const createSocialLinksHTML = () => `
+      <div class="social-links">
+          ${socialLinks.map(link => `
+              <a href="${link.url}" target="_blank" rel="noopener" class="social-btn social-${link.name.toLowerCase()}">
+                  <span class="social-icon">${link.icon}</span>
+                  <span class="social-text">${link.name}</span>
+              </a>
+          `).join('')}
+      </div>
+  `;
+
+  const header = document.querySelector('header');
+  if (header) {
+      const socialSectionHTML = `
+          <section class="social-section">
+              <p class="social-promo-text">تابعنا وشوف أحدث المنتجات وخطوات التصنيع على صفحات MG Concrete</p>
+              ${createSocialLinksHTML()}
+          </section>
+      `;
+      header.insertAdjacentHTML('afterend', socialSectionHTML);
+  }
+
+  let footer = document.querySelector('footer');
+  if (!footer) {
+      footer = document.createElement('footer');
+      document.body.appendChild(footer);
+  }
+  const footerSocialHTML = `
+      <div class="footer-social-section">
+          <h3>تابعنا على</h3>
+          ${createSocialLinksHTML()}
+      </div>
+  `;
+  footer.insertAdjacentHTML('beforeend', footerSocialHTML);
+}
+
 // --- Order Card Image Generation ---
 
 function getMergedCartItems() {
@@ -821,6 +868,7 @@ sendWhatsappBtn.addEventListener("click", sendToWhatsapp);
 loadProducts();
 initImageModal();
 initFloatingCartButton();
+injectSocialSections();
 
 const shareCardBtn = document.createElement('button');
 shareCardBtn.id = 'share-order-card-btn';
