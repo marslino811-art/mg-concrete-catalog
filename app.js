@@ -401,6 +401,7 @@ function renderFilteredProducts() {
           <div class="product-title">${escapeHtml(product.name)}</div>
           <div class="category">${escapeHtml(product.category)}</div>
         </div>
+        ${product.availability_label ? `<div class="availability-badge ${product.availability_type}">${escapeHtml(product.availability_label)}</div>` : ''}
 
         <div class="prices" id="prices-${product.id}">
           <div class="price-box active" data-finish="without_finish" onclick="selectFinish('${product.id}', 'without_finish')">
@@ -540,7 +541,8 @@ function buildWhatsappMessage() {
   });
 
   message += `إجمالي الطلب: ${money(total)}\n`;
-  message += `ملاحظات: ${notes || "لا توجد"}`;
+  message += `ملاحظات: ${notes || "لا توجد"}\n\n`;
+  message += `ملاحظة التوفر: بعض المنتجات قد تحتاج وقت تصنيع حسب التوفر.`;
   return encodeURIComponent(message);
 }
 
@@ -632,7 +634,7 @@ async function generateOrderCardCanvas() {
   const tempCtx = document.createElement('canvas').getContext('2d');
   tempCtx.font = '20px Arial';
   const notesLines = (notes.split('\n').length) + Math.floor(tempCtx.measureText(notes).width / 800);
-  const dynamicHeight = 550 + (mergedCart.length * 40) + (notesLines * 30);
+  const dynamicHeight = 590 + (mergedCart.length * 40) + (notesLines * 30);
 
   const canvas = document.createElement('canvas');
   canvas.width = 900;
@@ -712,6 +714,12 @@ async function generateOrderCardCanvas() {
   y += 35;
   ctx.font = '20px Arial';
   y = await wrapArabicText(ctx, notes, 850, y, 800, 30);
+
+  // Availability Note
+  ctx.font = 'italic 18px Arial';
+  ctx.fillStyle = '#6B7280';
+  ctx.textAlign = 'center';
+  ctx.fillText('ملاحظة: بعض المنتجات قد تحتاج وقت تصنيع حسب التوفر.', canvas.width / 2, canvas.height - 70);
 
   // Footer
   ctx.fillStyle = '#0B2D4D';
