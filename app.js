@@ -62,15 +62,57 @@ function getProductImages(product) {
   return [...new Set(result.map((x) => String(x).trim()).filter(Boolean))];
 }
 
+function normalizePriceOptions(product) {
+  const mode = product.price_mode || "dual";
+  const existingOptions = Array.isArray(product.price_options)
+    ? product.price_options
+        .map((option) => ({
+          key: String(option.key || "").trim(),
+          label: String(option.label || "السعر").trim(),
+          price: Number(option.price || 0)
+        }))
+        .filter((option) => option.key && option.price > 0)
+    : [];
+
+  if (existingOptions.length > 0) {
+    return existingOptions;
+  }
+
+  const withoutPrice = Number(product.price_without_finish || 0);
+  const finishedPrice = Number(product.price_finished || 0);
+
+  if (mode === "single") {
+    return [{ key: "single", label: "السعر", price: withoutPrice || finishedPrice }].filter((o) => o.price > 0);
+  }
+
+  if (mode === "without_only") {
+    return [{ key: "without_finish", label: "بدون فينيش", price: withoutPrice }].filter((o) => o.price > 0);
+  }
+
+  if (mode === "finished_only") {
+    return [{ key: "finished", label: "متفنش (متلون)", price: finishedPrice || withoutPrice }].filter((o) => o.price > 0);
+  }
+
+  return [
+    { key: "without_finish", label: "بدون فينيش", price: withoutPrice },
+    { key: "finished", label: "متفنش (متلون)", price: finishedPrice }
+  ].filter((o) => o.price > 0);
+}
+
 function normalizeProducts(list) {
   return (Array.isArray(list) ? list : []).map((product, index) => {
     const productId = product.id ?? product.code ?? index + 1;
     const images = getProductImages(product);
 
+    const priceOptions = normalizePriceOptions(product);
+    const priceMode = product.price_mode || (priceOptions.length === 1 ? "single" : "dual");
+
     return {
       ...product,
       id: productId,
       category: product.category || "منتجات",
+      price_mode: priceMode,
+      price_options: priceOptions,
       price_without_finish: Number(product.price_without_finish || 0),
       price_finished: Number(product.price_finished || 0),
       image: images[0] || "",
@@ -359,7 +401,8 @@ function renderFilteredProducts() {
     const currentImage = images[0] || "";
     productImageIndexes[product.id] = 0;
     productCardQuantities[product.id] = 1;
-    productCardFinishes[product.id] = product.price_mode === 'single' ? 'single' : 'without_finish';
+    const defaultPriceOption = (product.price_options && product.price_options[0]) ? product.price_options[0].key : 'single';
+    productCardFinishes[product.id] = defaultPriceOption;
 
     const galleryButtons = images.length > 1 ? `
       <button type="button" class="gallery-nav gallery-prev" onclick="changeProductImage('${product.id}', -1)" aria-label="الصورة السابقة">‹</button>
@@ -410,7 +453,7 @@ function renderFilteredProducts() {
         </div>
         ${product.availability_label ? `<div class="availability-badge ${product.availability_type}">${escapeHtml(product.availability_label)}</div>` : ''}
 
-        <div class="prices ${product.price_mode === 'single' ? 'single-price' : 'dual-price'}" id="prices-${product.id}">
+        <div class="prices ${((product.price_options || []).length === 1) ? 'single-price' : 'dual-price'}" id="prices-${product.id}">
           ${priceBoxesHTML}
         </div>
 
@@ -433,7 +476,7 @@ function addToCart(productId) {
   const product = products.find((item) => String(item.id) === String(productId));
   if (!product) return;
 
-  const finishValue = productCardFinishes[productId] || (product.price_mode === 'single' ? 'single' : 'without_finish');
+  const finishValue = productCardFinishes[productId] || ((product.price_options && product.price_options[0]) ? product.price_options[0].key : 'single');
   const qty = productCardQuantities[productId] || 1;
 
   // Explicitly find the selected price option with a fallback
