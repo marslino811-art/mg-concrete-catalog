@@ -112,7 +112,7 @@
     "id": 5,
     "code": "5",
     "name": "طقم رجل التنوره 3 قطع",
-    "category": "اطقم",
+    "category": "اشكال",
     "price_mode": "dual",
     "price_options": [
       {
@@ -123,11 +123,11 @@
       {
         "key": "finished",
         "label": "متفنش (متلون)",
-        "price": 300.0
+        "price": 450.0
       }
     ],
     "price_without_finish": 150.0,
-    "price_finished": 300.0,
+    "price_finished": 450.0,
     "image": "images/product_5_1.jpeg",
     "images": [
       "images/product_5_1.jpeg",
