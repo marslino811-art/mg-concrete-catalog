@@ -11,7 +11,23 @@
       "images/product_1_1.jpeg"
     ],
     "stock_qty": 4.0,
-    "stock_status": "متوفر"
+    "stock_status": "متوفر",
+    "availability_label": "متاح الآن",
+    "availability_type": "available"
+  },
+  {
+    "id": 2,
+    "code": "2",
+    "name": "بودر ماربلينو",
+    "category": "بودر",
+    "price_without_finish": 35.0,
+    "price_finished": 105.0,
+    "image": "",
+    "images": [],
+    "stock_qty": 0.0,
+    "stock_status": "نفد المخزون",
+    "availability_label": "يتصنع حسب الطلب",
+    "availability_type": "made_to_order"
   },
   {
     "id": 3,
@@ -25,7 +41,9 @@
       "images/product_3_1.jpeg"
     ],
     "stock_qty": 1.0,
-    "stock_status": "قارب على النفاد"
+    "stock_status": "قارب على النفاد",
+    "availability_label": "متاح الآن",
+    "availability_type": "available"
   },
   {
     "id": 4,
@@ -39,7 +57,9 @@
       "images/product_4_1.jpeg"
     ],
     "stock_qty": 16.0,
-    "stock_status": "متوفر"
+    "stock_status": "متوفر",
+    "availability_label": "متاح الآن",
+    "availability_type": "available"
   },
   {
     "id": 5,
@@ -54,7 +74,9 @@
       "images/product_5_2.jpeg"
     ],
     "stock_qty": 10.0,
-    "stock_status": "متوفر"
+    "stock_status": "متوفر",
+    "availability_label": "متاح الآن",
+    "availability_type": "available"
   },
   {
     "id": 6,
@@ -68,7 +90,9 @@
       "images/product_6_1.jpeg"
     ],
     "stock_qty": 10.0,
-    "stock_status": "متوفر"
+    "stock_status": "متوفر",
+    "availability_label": "متاح الآن",
+    "availability_type": "available"
   },
   {
     "id": 7,
@@ -82,6 +106,8 @@
       "images/product_7_1.jpeg"
     ],
     "stock_qty": 30.0,
-    "stock_status": "متوفر"
+    "stock_status": "متوفر",
+    "availability_label": "متاح الآن",
+    "availability_type": "available"
   }
 ]
