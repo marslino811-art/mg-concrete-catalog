@@ -353,7 +353,7 @@ function renderProducts() {
             <strong>${money(product.price_without_finish)}</strong>
           </div>
           <div class="price-box">
-            <span>متفنر / Finished</span>
+            <span>متفنش  / Finished</span>
             <strong>${money(product.price_finished)}</strong>
           </div>
         </div>
