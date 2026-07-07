@@ -359,7 +359,7 @@ function renderFilteredProducts() {
     const currentImage = images[0] || "";
     productImageIndexes[product.id] = 0;
     productCardQuantities[product.id] = 1;
-    productCardFinishes[product.id] = 'without_finish';
+    productCardFinishes[product.id] = product.price_mode === 'single' ? 'single' : 'without_finish';
 
     const galleryButtons = images.length > 1 ? `
       <button type="button" class="gallery-nav gallery-prev" onclick="changeProductImage('${product.id}', -1)" aria-label="الصورة السابقة">‹</button>
@@ -384,6 +384,13 @@ function renderFilteredProducts() {
     const card = document.createElement("article");
     card.className = "product-card";
 
+    const priceBoxesHTML = (product.price_options || []).map(option => `
+        <div class="price-box ${productCardFinishes[product.id] === option.key ? 'active' : ''}" data-finish="${option.key}" onclick="selectFinish('${product.id}', '${option.key}')">
+            <span>${escapeHtml(option.label)}</span>
+            <strong>${money(option.price)}</strong>
+        </div>
+    `).join('');
+
     card.innerHTML = `
       <div class="product-image">
         ${currentImage ? `
@@ -403,15 +410,8 @@ function renderFilteredProducts() {
         </div>
         ${product.availability_label ? `<div class="availability-badge ${product.availability_type}">${escapeHtml(product.availability_label)}</div>` : ''}
 
-        <div class="prices" id="prices-${product.id}">
-          <div class="price-box active" data-finish="without_finish" onclick="selectFinish('${product.id}', 'without_finish')">
-            <span>بدون فينيش</span>
-            <strong>${money(product.price_without_finish)}</strong>
-          </div>
-          <div class="price-box" data-finish="finished" onclick="selectFinish('${product.id}', 'finished')">
-            <span>متفنش (متلون)</span>
-            <strong>${money(product.price_finished)}</strong>
-          </div>
+        <div class="prices ${product.price_mode === 'single' ? 'single-price' : 'dual-price'}" id="prices-${product.id}">
+          ${priceBoxesHTML}
         </div>
 
         <div class="controls">
@@ -433,11 +433,17 @@ function addToCart(productId) {
   const product = products.find((item) => String(item.id) === String(productId));
   if (!product) return;
 
-  const finishValue = productCardFinishes[productId] || 'without_finish';
+  const finishValue = productCardFinishes[productId] || (product.price_mode === 'single' ? 'single' : 'without_finish');
   const qty = productCardQuantities[productId] || 1;
 
-  const finishLabel = finishValue === "finished" ? "متفنش (متلون)" : "بدون فينيش";
-  const unitPrice = finishValue === "finished" ? product.price_finished : product.price_without_finish;
+  const selectedOption = (product.price_options || []).find(opt => opt.key === finishValue) || (product.price_options || [])[0];
+  if (!selectedOption) {
+      console.error("No price option found for product", productId);
+      return;
+  }
+
+  const finishLabel = selectedOption.label;
+  const unitPrice = selectedOption.price;
 
   // Check if the same product with the same finish and price already exists
   const existingItem = cart.find(item =>
@@ -685,7 +691,7 @@ async function generateOrderCardCanvas() {
   ctx.font = '20px Arial';
   mergedCart.forEach(item => {
     ctx.textAlign = 'right';
-    ctx.fillText(`${item.name} (${item.finish.replace(' (متلون)', '')})`, 830, y);
+    ctx.fillText(item.finish === 'السعر' ? item.name : `${item.name} (${item.finish.replace(' (متلون)', '')})`, 830, y);
     ctx.textAlign = 'center';
     ctx.fillText(item.qty, 420, y);
     ctx.fillText(formatMoneySimple(item.unitPrice), 280, y);
