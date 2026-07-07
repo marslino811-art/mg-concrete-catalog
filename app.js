@@ -270,11 +270,11 @@ function chooseProductImage(productId, index) {
 
 function selectFinish(productId, finishValue) {
     productCardFinishes[productId] = finishValue;
-    const optionsContainer = document.getElementById(`finish-options-${productId}`);
-    if (!optionsContainer) return;
-    const buttons = optionsContainer.querySelectorAll('.finish-option');
-    buttons.forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.finish === finishValue);
+    const pricesContainer = document.getElementById(`prices-${productId}`);
+    if (!pricesContainer) return;
+    const priceBoxes = pricesContainer.querySelectorAll('.price-box');
+    priceBoxes.forEach(box => {
+        box.classList.toggle('active', box.dataset.finish === finishValue);
     });
 }
 
@@ -347,20 +347,15 @@ function renderProducts() {
           <div class="category">${escapeHtml(product.category)}</div>
         </div>
 
-        <div class="prices">
-          <div class="price-box">
+        <div class="prices" id="prices-${product.id}">
+          <div class="price-box active" data-finish="without_finish" onclick="selectFinish('${product.id}', 'without_finish')">
             <span>بدون فينيش</span>
             <strong>${money(product.price_without_finish)}</strong>
           </div>
-          <div class="price-box">
-            <span>متفنش  / Finished</span>
+          <div class="price-box" data-finish="finished" onclick="selectFinish('${product.id}', 'finished')">
+            <span>متفنش (متلون)</span>
             <strong>${money(product.price_finished)}</strong>
           </div>
-        </div>
-
-        <div class="finish-options" id="finish-options-${product.id}">
-            <button class="finish-option active" data-finish="without_finish" onclick="selectFinish('${product.id}', 'without_finish')">بدون فينيش</button>
-            <button class="finish-option" data-finish="finished" onclick="selectFinish('${product.id}', 'finished')">متفنر</button>
         </div>
 
         <div class="controls">
@@ -385,7 +380,7 @@ function addToCart(productId) {
   const finishValue = productCardFinishes[productId] || 'without_finish';
   const qty = productCardQuantities[productId] || 1;
 
-  const finishLabel = finishValue === "finished" ? "Finished" : "Without Finish";
+  const finishLabel = finishValue === "finished" ? "متفنش (متلون)" : "بدون فينيش";
   const unitPrice = finishValue === "finished" ? product.price_finished : product.price_without_finish;
 
   // Check if the same product with the same finish and price already exists
@@ -633,7 +628,7 @@ async function generateOrderCardCanvas() {
   ctx.font = '20px Arial';
   mergedCart.forEach(item => {
     ctx.textAlign = 'right';
-    ctx.fillText(`${item.name} (${item.finish})`, 830, y);
+    ctx.fillText(`${item.name} (${item.finish.replace(' (متلون)', '')})`, 830, y);
     ctx.textAlign = 'center';
     ctx.fillText(item.qty, 420, y);
     ctx.fillText(formatMoneySimple(item.unitPrice), 280, y);
