@@ -13,6 +13,8 @@ let cart = [];
 let productImageIndexes = {};
 let productCardQuantities = {};
 let productCardFinishes = {};
+let activeCategory = 'الكل';
+let searchTerm = '';
 
 const productsContainer = document.getElementById("products");
 const cartItemsContainer = document.getElementById("cart-items");
@@ -87,7 +89,41 @@ async function loadProducts() {
     products = normalizeProducts(fallbackProducts);
   }
 
-  renderProducts();
+  renderFilters();
+  renderFilteredProducts();
+}
+
+function renderFilters() {
+    if (document.getElementById('catalog-tools')) return;
+
+    const toolsHTML = `
+        <div id="catalog-tools" class="catalog-tools">
+            <input type="search" id="product-search" class="catalog-search" placeholder="ابحث عن منتج...">
+            <div id="category-filters" class="category-filters"></div>
+        </div>
+    `;
+    productsContainer.insertAdjacentHTML('beforebegin', toolsHTML);
+
+    const categories = ['الكل', ...new Set(products.map(p => p.category || 'الأشكال'))];
+    const filtersContainer = document.getElementById('category-filters');
+    filtersContainer.innerHTML = categories.map(cat => 
+        `<button type="button" class="category-chip ${cat === 'الكل' ? 'active' : ''}" data-category="${escapeHtml(cat)}">${escapeHtml(cat)}</button>`
+    ).join('');
+
+    filtersContainer.addEventListener('click', e => {
+        if (e.target.classList.contains('category-chip')) {
+            activeCategory = e.target.dataset.category;
+            document.querySelectorAll('.category-chip').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            renderFilteredProducts();
+        }
+    });
+
+    const searchInput = document.getElementById('product-search');
+    searchInput.addEventListener('input', e => {
+        searchTerm = e.target.value.trim();
+        renderFilteredProducts();
+    });
 }
 
 function showToast(message) {
@@ -296,10 +332,25 @@ function updateCartQuantity(index, change) {
     if (cart[index].qty <= 0) removeFromCart(index); else renderCart();
 }
 
-function renderProducts() {
+function renderFilteredProducts() {
+  let filteredProducts = products;
+
+  if (activeCategory !== 'الكل') {
+      filteredProducts = filteredProducts.filter(p => p.category === activeCategory);
+  }
+
+  if (searchTerm) {
+      const lowerSearchTerm = searchTerm.toLowerCase();
+      filteredProducts = filteredProducts.filter(p =>
+          p.name.toLowerCase().includes(lowerSearchTerm) ||
+          (p.category && p.category.toLowerCase().includes(lowerSearchTerm)) ||
+          (p.code && String(p.code).toLowerCase().includes(lowerSearchTerm))
+      );
+  }
+
   productsContainer.innerHTML = "";
 
-  products.forEach((product) => {
+  filteredProducts.forEach((product) => {
     const images = getProductImages(product);
     const currentImage = images[0] || "";
     productImageIndexes[product.id] = 0;
