@@ -104,7 +104,11 @@ function renderFilters() {
     `;
     productsContainer.insertAdjacentHTML('beforebegin', toolsHTML);
 
-    const categories = ['الكل', ...new Set(products.map(p => p.category || 'الأشكال'))];
+    const categories = [
+        'الكل', 'اشكال', 'اطقم', 'فازات', 'كوسترات', 'صوانى', 'مباخر',
+        'جارات', 'شغل رمضان', 'شغل شم النسيم', 'شغل عيد الاضحى',
+        'علب مناديل', 'شغل كنسى', 'خامات', 'الوان', 'بودر'
+    ];
     const filtersContainer = document.getElementById('category-filters');
     filtersContainer.innerHTML = categories.map(cat => 
         `<button type="button" class="category-chip ${cat === 'الكل' ? 'active' : ''}" data-category="${escapeHtml(cat)}">${escapeHtml(cat)}</button>`
