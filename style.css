@@ -257,6 +257,10 @@ h1, h2, p {
   margin: 10px 0 12px;
 }
 
+.prices.single-price {
+  grid-template-columns: 1fr;
+}
+
 .price-box {
   background: #f8fafc;
   border: 1px solid #e5e7eb;
