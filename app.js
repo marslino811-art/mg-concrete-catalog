@@ -35,6 +35,15 @@ let modalCounter = null;
 let currentModalProduct = null;
 let currentModalImageIndex = 0;
 
+// --- Details Modal ---
+let detailsModal = null;
+let currentDetailsProduct = null;
+let modalProductState = {
+    qty: 1,
+    finish: null,
+    imageIndex: 0
+};
+
 const finishNotes = {
   "without_finish": { text: "أبيض سادة بلون الخامة الأساسية", class: "raw" },
   "finished": { text: "الألوان والتشطيب حسب الطلب على واتساب", class: "finished" },
@@ -298,6 +307,124 @@ function openImageModal(productId, imageIndex) {
     updateImageModal();
 }
 
+function initDetailsModal() {
+    const modalHTML = `
+        <div class="details-modal" id="details-modal" style="display: none;">
+            <div class="details-modal-content" id="details-modal-content">
+                <span class="details-modal-close" id="details-modal-close">&times;</span>
+                <div id="details-modal-body"></div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    detailsModal = document.getElementById('details-modal');
+    const modalCloseBtn = document.getElementById('details-modal-close');
+
+    modalCloseBtn.onclick = closeDetailsModal;
+    detailsModal.onclick = (e) => {
+        if (e.target === detailsModal) {
+            closeDetailsModal();
+        }
+    };
+}
+
+function closeDetailsModal() {
+    if (detailsModal) detailsModal.style.display = 'none';
+    document.getElementById('details-modal-body').innerHTML = '';
+    currentDetailsProduct = null;
+}
+
+function changeDetailsModalImage(direction) {
+    if (!currentDetailsProduct) return;
+    const images = getProductImages(currentDetailsProduct);
+    if (images.length <= 1) return;
+    
+    modalProductState.imageIndex = (modalProductState.imageIndex + direction + images.length) % images.length;
+    
+    const imgEl = document.getElementById('details-modal-img');
+    const counterEl = document.getElementById('details-modal-counter');
+    
+    if (imgEl) imgEl.src = images[modalProductState.imageIndex];
+    if (counterEl) counterEl.textContent = `${modalProductState.imageIndex + 1} / ${images.length}`;
+}
+
+function changeDetailsModalQuantity(change) {
+    const newValue = Math.max(1, modalProductState.qty + change);
+    modalProductState.qty = newValue;
+    
+    const qtyValueEl = document.getElementById('details-qty-value');
+    if (qtyValueEl) {
+        qtyValueEl.textContent = newValue;
+    }
+}
+
+function selectDetailsModalFinish(finishValue) {
+    modalProductState.finish = finishValue;
+    
+    const pricesContainer = document.getElementById('details-prices');
+    if (!pricesContainer) return;
+    
+    pricesContainer.querySelectorAll('.price-box').forEach(box => {
+        box.classList.toggle('active', box.dataset.finish === finishValue);
+    });
+
+    const finishNoteEl = document.getElementById('details-finish-note');
+    if (!finishNoteEl) return;
+
+    const note = getFinishNote(finishValue);
+    finishNoteEl.textContent = note.text;
+    finishNoteEl.className = `finish-note ${note.class}`;
+    finishNoteEl.style.display = note.text ? 'block' : 'none';
+}
+
+function addToCartFromModal() {
+    if (!currentDetailsProduct) return;
+
+    const product = currentDetailsProduct;
+    const finishValue = modalProductState.finish;
+    const qty = modalProductState.qty;
+
+    let selectedOption = (product.price_options || []).find(opt => opt.key === finishValue);
+    if (!selectedOption && product.price_options && product.price_options.length > 0) {
+        selectedOption = product.price_options[0];
+    }
+
+    if (!selectedOption) {
+        console.error("No price option found for product in modal", product.id);
+        return;
+    }
+
+    const finishLabel = selectedOption.label;
+    const finishNoteText = getFinishNote(selectedOption.key).text;
+    const unitPrice = selectedOption.price;
+
+    const existingItem = cart.find(item =>
+        String(item.productId) === String(product.id) &&
+        item.finish === finishLabel &&
+        Number(item.unitPrice) === Number(unitPrice)
+    );
+
+    if (existingItem) {
+        existingItem.qty += qty;
+        existingItem.lineTotal = existingItem.qty * existingItem.unitPrice;
+    } else {
+        cart.push({
+            productId: product.id,
+            name: product.name,
+            finish: finishLabel,
+            finishNote: finishNoteText,
+            qty,
+            unitPrice,
+            lineTotal: unitPrice * qty
+        });
+    }
+
+    renderCart();
+    showToast("تمت إضافة المنتج للطلب ✅");
+    closeDetailsModal();
+}
+
 function getCurrentImageIndex(product) {
   const images = getProductImages(product);
   const current = Number(productImageIndexes[product.id] || 0);
@@ -491,6 +618,7 @@ function renderFilteredProducts() {
                 <button class="qty-btn" onclick="changeCardQuantity('${product.id}', 1)" aria-label="Increase quantity">+</button>
             </div>
             <button class="add-btn" onclick="addToCart('${product.id}')">➕ إضافة للطلب</button>
+            <button class="product-details-btn" onclick="openDetailsModal('${product.id}')">عرض التفاصيل</button>
         </div>
       </div>
     `;
@@ -498,6 +626,79 @@ function renderFilteredProducts() {
     productsContainer.appendChild(card);
     updateFinishNoteDisplay(product.id); // Set initial note
   });
+}
+
+function openDetailsModal(productId) {
+    const product = products.find(p => String(p.id) === String(productId));
+    if (!product) return;
+
+    currentDetailsProduct = product;
+    
+    // Reset state for the new product
+    modalProductState.qty = 1;
+    modalProductState.imageIndex = 0;
+    modalProductState.finish = (product.price_options && product.price_options[0]) ? product.price_options[0].key : 'single';
+
+    const images = getProductImages(product);
+    const currentImage = images[0] || "";
+
+    const galleryButtons = images.length > 1 ? `
+      <button type="button" class="gallery-nav gallery-prev" onclick="changeDetailsModalImage(-1)" aria-label="الصورة السابقة">‹</button>
+      <button type="button" class="gallery-nav gallery-next" onclick="changeDetailsModalImage(1)" aria-label="الصورة التالية">›</button>
+      <div class="image-counter" id="details-modal-counter">1 / ${images.length}</div>
+    ` : "";
+    
+    const priceBoxesHTML = (product.price_options || []).map(option => `
+        <div class="price-box ${modalProductState.finish === option.key ? 'active' : ''}" data-finish="${option.key}" onclick="selectDetailsModalFinish('${option.key}')">
+            <span>${escapeHtml(option.label)}</span>
+            <strong>${money(option.price)}</strong>
+        </div>
+    `).join('');
+
+    const initialNote = getFinishNote(modalProductState.finish);
+
+    const modalBody = document.getElementById('details-modal-body');
+    modalBody.innerHTML = `
+        <div class="details-gallery">
+            <div class="details-main-image">
+                ${currentImage ? `
+                    <img id="details-modal-img" src="${escapeHtml(currentImage)}" alt="${escapeHtml(product.name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
+                    <div class="placeholder" style="display:none;">صورة المنتج</div>
+                ` : `
+                    <div class="placeholder">صورة المنتج</div>
+                `}
+                ${galleryButtons}
+            </div>
+        </div>
+        <div class="details-info">
+            <div class="details-header">
+                <div class="details-title">${escapeHtml(product.name)}</div>
+                <div class="category">${escapeHtml(product.category)}</div>
+            </div>
+            
+            ${product.description ? `<p class="details-description">${escapeHtml(product.description)}</p>` : ''}
+            ${product.size ? `<div class="details-size">المقاس: ${escapeHtml(product.size)}</div>` : ''}
+
+            <div class="prices ${((product.price_options || []).length === 1) ? 'single-price' : 'dual-price'}" id="details-prices">
+                ${priceBoxesHTML}
+            </div>
+
+            <div id="details-finish-note" class="finish-note ${initialNote.class}" style="${initialNote.text ? 'display:block' : 'display:none'}">
+                ${initialNote.text}
+            </div>
+
+            <div class="details-actions">
+                <div class="qty-stepper">
+                    <button class="qty-btn" onclick="changeDetailsModalQuantity(-1)" aria-label="Decrease quantity">-</button>
+                    <span class="qty-value" id="details-qty-value">1</span>
+                    <button class="qty-btn" onclick="changeDetailsModalQuantity(1)" aria-label="Increase quantity">+</button>
+                </div>
+                <button class="add-btn" onclick="addToCartFromModal()">➕ إضافة للطلب</button>
+            </div>
+        </div>
+    `;
+
+    if (detailsModal) detailsModal.style.display = 'flex';
 }
 
 function addToCart(productId) {
@@ -898,6 +1099,7 @@ sendWhatsappBtn.addEventListener("click", sendToWhatsapp);
 loadProducts();
 initImageModal();
 initFloatingCartButton();
+initDetailsModal();
 injectSocialSections();
 
 const shareCardBtn = document.createElement('button');
