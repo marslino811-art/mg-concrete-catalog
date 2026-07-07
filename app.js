@@ -35,6 +35,12 @@ let modalCounter = null;
 let currentModalProduct = null;
 let currentModalImageIndex = 0;
 
+const finishNotes = {
+  "without_finish": { text: "أبيض سادة بلون الخامة الأساسية", class: "raw" },
+  "finished": { text: "الألوان والتشطيب حسب الطلب على واتساب", class: "finished" },
+  "single": { text: "أبيض سادة بلون الخامة الأساسية", class: "raw" } // Assuming single price is like "بدون فينيش"
+};
+
 function money(value) {
   return `${Number(value || 0).toFixed(2)} جنيه`;
 }
@@ -350,6 +356,22 @@ function chooseProductImage(productId, index) {
   updateProductImage(product.id);
 }
 
+function getFinishNote(finishKey) {
+  return finishNotes[finishKey] || { text: "", class: "" };
+}
+
+function updateFinishNoteDisplay(productId) {
+  const finishNoteEl = document.getElementById(`finish-note-${productId}`);
+  if (!finishNoteEl) return;
+
+  const selectedFinishKey = productCardFinishes[productId];
+  const note = getFinishNote(selectedFinishKey);
+
+  finishNoteEl.textContent = note.text;
+  finishNoteEl.className = `finish-note ${note.class}`; // Reset classes and add new one
+  finishNoteEl.style.display = note.text ? 'block' : 'none';
+}
+
 function selectFinish(productId, finishValue) {
     productCardFinishes[productId] = finishValue;
     const pricesContainer = document.getElementById(`prices-${productId}`);
@@ -358,6 +380,7 @@ function selectFinish(productId, finishValue) {
     priceBoxes.forEach(box => {
         box.classList.toggle('active', box.dataset.finish === finishValue);
     });
+    updateFinishNoteDisplay(productId);
 }
 
 function changeCardQuantity(productId, change) {
@@ -469,6 +492,7 @@ function renderFilteredProducts() {
     `;
     
     productsContainer.appendChild(card);
+    updateFinishNoteDisplay(product.id); // Set initial note
   });
 }
 
@@ -491,6 +515,7 @@ function addToCart(productId) {
   }
 
   const finishLabel = selectedOption.label;
+  const finishNoteText = getFinishNote(selectedOption.key).text;
   const unitPrice = selectedOption.price;
 
   // Check if the same product with the same finish and price already exists
@@ -510,6 +535,7 @@ function addToCart(productId) {
       productId: product.id,
       name: product.name,
       finish: finishLabel,
+      finishNote: finishNoteText,
       qty,
       unitPrice,
       lineTotal: unitPrice * qty
@@ -587,6 +613,8 @@ function buildWhatsappMessage() {
   message += "المنتجات:\n";
 
   cart.forEach((item, index) => {
+    const finishNoteLine = item.finishNote ? `\n- ملاحظة التشطيب: ${item.finishNote}` : '';
+
     message += `${index + 1}) ${item.name}\n`;
     message += `- النوع: ${item.finish}\n`;
     message += `- الكمية: ${item.qty}\n`;
@@ -597,6 +625,7 @@ function buildWhatsappMessage() {
   message += `إجمالي الطلب: ${money(total)}\n`;
   message += `ملاحظات: ${notes || "لا توجد"}\n\n`;
   message += `ملاحظة التوفر: بعض المنتجات قد تحتاج وقت تصنيع حسب التوفر.`;
+
   return encodeURIComponent(message);
 }
 
