@@ -612,50 +612,45 @@ function sendToWhatsapp() {
 }
 
 function injectSocialSections() {
-  if (document.querySelector('.social-section')) return; // Guard against multiple injections
+  // Remove any old social sections to prevent duplicates and ensure a clean replacement.
+  document.querySelectorAll('.social-section, .footer-social-section').forEach(el => el.remove());
+
+  const icons = {
+    youtube: `<svg viewBox="0 0 28 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M27.4333 3.1C27.1333 1.88333 26.1167 0.9 24.9 0.6C22.7333 0 14 0 14 0C14 0 5.26667 0 3.1 0.6C1.88333 0.9 0.866667 1.88333 0.566667 3.1C0 5.26667 0 10 0 10C0 10 0 14.7333 0.566667 16.9C0.866667 18.1167 1.88333 19.1 3.1 19.4C5.26667 20 14 20 14 20C14 20 22.7333 20 24.9 19.4C26.1167 19.1 27.1333 18.1167 27.4333 16.9C28 14.7333 28 10 28 10C28 10 28 5.26667 27.4333 3.1Z" fill="#FF0000"/><path d="M11.2 14.2833L18.4833 10L11.2 5.71667V14.2833Z" fill="white"/></svg>`,
+    facebook: `<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 1.5H2C1.725 1.5 1.5 1.725 1.5 2V18C1.5 18.275 1.725 18.5 2 18.5H10.5V12.5H8.5V10H10.5V8C10.5 5.79 11.97 4.5 14.04 4.5C15.03 4.5 15.91 4.58 16.19 4.62V6.9H14.82C13.71 6.9 13.5 7.44 13.5 8.23V10H16L15.5 12.5H13.5V18.5H18C18.275 18.5 18.5 18.275 18.5 18V2C18.5 1.725 18.275 1.5 18 1.5Z" fill="#1877F2"/></svg>`,
+    instagram: `<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="ig-grad" cx="0.3" cy="1.2" r="1.5"><stop stop-color="#f09433"/><stop offset="0.4" stop-color="#e6683c"/><stop offset="0.6" stop-color="#dc2743"/><stop offset="0.8" stop-color="#cc2366"/><stop offset="1" stop-color="#bc1888"/></radialGradient></defs><path d="M10 1.5C6.41 1.5 6.02 1.515 5.105 1.56C4.19 1.605 3.515 1.75 2.93 1.965C2.33 2.185 1.845 2.48 1.365 2.96C0.885 3.44 0.59 3.925 0.37 4.525C0.155 5.11 0.01 5.785 0.06 6.695C0.015 7.61 0 7.995 0 10C0 12.005 0.015 12.39 0.06 13.305C0.01 14.215 0.155 14.89 0.37 15.475C0.59 16.075 0.885 16.56 1.365 17.04C1.845 17.52 2.33 17.815 2.93 18.035C3.515 18.25 4.19 18.395 5.105 18.44C6.02 18.485 6.41 18.5 10 18.5C13.59 18.5 13.98 18.485 14.895 18.44C15.81 18.395 16.485 18.25 17.07 18.035C17.67 17.815 18.155 17.52 18.635 17.04C19.115 16.56 19.41 16.075 19.63 15.475C19.845 14.89 19.99 14.215 19.94 13.305C19.985 12.39 20 12.005 20 10C20 7.995 19.985 7.61 19.94 6.695C19.99 5.785 19.845 5.11 19.63 4.525C19.41 3.925 19.115 3.44 18.635 2.96C18.155 2.48 17.67 2.185 17.07 1.965C16.485 1.75 15.81 1.605 14.895 1.56C13.98 1.515 13.59 1.5 10 1.5ZM10 3.18C13.515 3.18 13.88 3.195 14.79 3.24C15.61 3.28 16.115 3.415 16.44 3.545C16.86 3.71 17.165 3.915 17.455 4.205C17.745 4.495 17.95 4.8 18.115 5.22C18.245 5.545 18.38 6.05 18.42 6.87C18.465 7.78 18.48 8.145 18.48 10C18.48 11.855 18.465 12.22 18.42 13.13C18.38 13.95 18.245 14.455 18.115 14.78C17.95 15.2 17.745 15.505 17.455 15.795C17.165 16.085 16.86 16.29 16.44 16.455C16.115 16.585 15.61 16.72 14.79 16.76C13.88 16.805 13.515 16.82 10 16.82C6.485 16.82 6.12 16.805 5.21 16.76C4.39 16.72 3.885 16.585 3.56 16.455C3.14 16.29 2.835 16.085 2.545 15.795C2.255 15.505 2.05 15.2 1.885 14.78C1.755 14.455 1.62 13.95 1.58 13.13C1.535 12.22 1.52 11.855 1.52 10C1.52 8.145 1.535 7.78 1.58 6.87C1.62 6.05 1.755 5.545 1.885 5.22C2.05 4.8 2.255 4.495 2.545 4.205C2.835 3.915 3.14 3.71 3.56 3.545C3.885 3.415 4.39 3.28 5.21 3.24C6.12 3.195 6.485 3.18 10 3.18Z" fill="url(#ig-grad)"/><path d="M10 6.36C7.99 6.36 6.36 7.99 6.36 10C6.36 12.01 7.99 13.64 10 13.64C12.01 13.64 13.64 12.01 13.64 10C13.64 7.99 12.01 6.36 10 6.36ZM10 12.06C8.86 12.06 7.94 11.14 7.94 10C7.94 8.86 8.86 7.94 10 7.94C11.14 7.94 12.06 8.86 12.06 10C12.06 11.14 11.14 12.06 10 12.06Z" fill="url(#ig-grad)"/><path d="M15.335 5.51C15.335 5.92 15.005 6.25 14.595 6.25C14.185 6.25 13.855 5.92 13.855 5.51C13.855 5.1 14.185 4.77 14.595 4.77C15.005 4.77 15.335 5.1 15.335 5.51Z" fill="url(#ig-grad)"/></svg>`,
+    tiktok: `<svg viewBox="0 0 20 23" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.53 0.11C12.37 0.04 12.19 0 12 0H8.5C8.22 0 8 0.22 8 0.5V13.5C8 13.78 8.22 14 8.5 14H12C12.28 14 12.5 13.78 12.5 13.5V9.5C12.5 9.22 12.28 9 12 9H9V2H11.5C11.63 2 11.75 2.05 11.84 2.14C11.93 2.23 11.98 2.35 12 2.48V6.5C12 6.78 12.22 7 12.5 7H16C16.28 7 16.5 6.78 16.5 6.5V2.5C16.5 1.12 15.38 0 14 0C13.35 0 12.89 0.21 12.53 0.11ZM20 5.5C20 5.22 19.78 5 19.5 5H16C15.72 5 15.5 5.22 15.5 5.5V17.5C15.5 19.99 13.49 22 11 22C8.51 22 6.5 19.99 6.5 17.5C6.5 15.01 8.51 13 11 13C11.28 13 11.5 13.22 11.5 13.5V15.5C11.5 15.78 11.28 16 11 16C9.62 16 8.5 17.12 8.5 18.5C8.5 19.88 9.62 21 11 21C12.38 21 13.5 19.88 13.5 18.5V9.5C13.5 9.22 13.72 9 14 9H19.5C19.78 9 20 9.22 20 9.5V5.5ZM4 8.5C4 8.22 3.78 8 3.5 8H0.5C0.22 8 0 8.22 0 8.5V12.5C0 12.78 0.22 13 0.5 13H4C4.28 13 4.5 12.78 4.5 12.5V8.5H4Z" fill="black"/></svg>`,
+    whatsapp: `<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10C0 11.85 0.53 13.55 1.44 15.01L0.1 19.9L5.13 18.56C6.53 19.42 8.19 19.99 10 19.99C15.52 19.99 20 15.51 20 9.99C20 4.47 15.52 0 10 0ZM10 18.33C8.39 18.33 6.86 17.82 5.59 16.91L5.24 16.69L2.41 17.58L3.32 14.84L3.08 14.48C2.11 13.14 1.67 11.59 1.67 10C1.67 5.4 5.4 1.67 10 1.67C14.6 1.67 18.33 5.4 18.33 10C18.33 14.6 14.6 18.33 10 18.33ZM14.53 12.05C14.31 12.58 13.31 13.12 12.83 13.27C12.35 13.42 11.76 13.44 11.31 13.27C10.86 13.12 10.08 12.85 9.14 11.99C7.96 10.91 7.21 9.61 7.03 9.31C6.85 9.01 6.73 8.83 6.73 8.56C6.73 8.29 6.82 8.08 7 7.9C7.17 7.73 7.38 7.58 7.59 7.58C7.72 7.58 7.85 7.58 7.96 7.59C8.15 7.61 8.28 7.63 8.41 7.93C8.54 8.23 8.85 9.01 8.93 9.13C9.01 9.25 9.05 9.34 8.97 9.46C8.89 9.58 8.85 9.64 8.73 9.77C8.61 9.89 8.49 10.01 8.38 10.1C8.28 10.18 8.18 10.27 8.31 10.48C8.44 10.69 8.81 11.23 9.31 11.67C9.94 12.23 10.53 12.5 10.74 12.62C10.95 12.74 11.09 12.71 11.23 12.59C11.37 12.47 11.65 12.13 11.83 11.89C12.01 11.65 12.22 11.62 12.44 11.7C12.66 11.78 13.51 12.21 13.73 12.31C13.95 12.41 14.12 12.47 14.18 12.53C14.24 12.59 14.24 12.77 14.18 12.89C14.12 13.01 14.03 13.13 13.94 13.22C14.75 12.52 14.63 12.23 14.53 12.05Z" fill="#25D366"/></svg>`
+  };
 
   const socialLinks = [
-      { name: 'YouTube', icon: '▶️', url: 'https://www.youtube.com/@MG_Concrete' },
-      { name: 'Facebook', icon: '📘', url: 'https://www.facebook.com/groups/630006006204038/?ref=share&mibextid=NSMWBT' },
-      { name: 'TikTok', icon: '🎵', url: 'https://www.tiktok.com/@mg.candles1' },
-      { name: 'Instagram', icon: '📸', url: 'https://www.instagram.com/mg___candles/' },
-      { name: 'WhatsApp', icon: '💬', url: `https://wa.me/${WHATSAPP_NUMBER}` }
+    { name: 'YouTube', url: 'https://www.youtube.com/@MG_Concrete', class: 'youtube', icon: icons.youtube },
+    { name: 'Facebook', url: 'https://www.facebook.com/groups/630006006204038/?ref=share&mibextid=NSMWBT', class: 'facebook', icon: icons.facebook },
+    { name: 'Instagram', url: 'https://www.instagram.com/mg___candles/', class: 'instagram', icon: icons.instagram },
+    { name: 'WhatsApp', url: `https://wa.me/${WHATSAPP_NUMBER}`, class: 'whatsapp', icon: icons.whatsapp },
+    { name: 'TikTok', url: 'https://www.tiktok.com/@mg.candles1', class: 'tiktok', icon: icons.tiktok }
   ];
 
-  const createSocialLinksHTML = () => `
-      <div class="social-links">
-          ${socialLinks.map(link => `
-              <a href="${link.url}" target="_blank" rel="noopener" class="social-btn social-${link.name.toLowerCase()}">
-                  <span class="social-icon">${link.icon}</span>
-                  <span class="social-text">${link.name}</span>
-              </a>
-          `).join('')}
-      </div>
-  `;
+  const socialGridHTML = socialLinks.map(link => `
+    <a href="${link.url}" target="_blank" rel="noopener" class="social-card ${link.class}-card">
+      <div class="social-icon">${link.icon}</div>
+      <span class="social-name">${link.name}</span>
+    </a>
+  `).join('');
 
   const header = document.querySelector('header');
   if (header) {
       const socialSectionHTML = `
           <section class="social-section">
-              <p class="social-promo-text">تابعنا وشوف أحدث المنتجات وخطوات التصنيع على صفحات MG Concrete</p>
-              ${createSocialLinksHTML()}
+              <h2 class="social-title">تابعنا على صفحاتنا</h2>
+              <p class="social-subtitle">شوف أحدث المنتجات وخطوات التصنيع والعروض على صفحات MG Concrete</p>
+              <div class="social-grid">
+                ${socialGridHTML}
+              </div>
           </section>
       `;
       header.insertAdjacentHTML('afterend', socialSectionHTML);
   }
-
-  let footer = document.querySelector('footer');
-  if (!footer) {
-      footer = document.createElement('footer');
-      document.body.appendChild(footer);
-  }
-  const footerSocialHTML = `
-      <div class="footer-social-section">
-          <h3>تابعنا على</h3>
-          ${createSocialLinksHTML()}
-      </div>
-  `;
-  footer.insertAdjacentHTML('beforeend', footerSocialHTML);
 }
 
 // --- Order Card Image Generation ---
