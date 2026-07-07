@@ -3,7 +3,7 @@
     "id": 1,
     "code": "1",
     "name": "فازات بوهيمى",
-    "category": "الأطقم",
+    "category": "اطقم",
     "price_without_finish": 250.0,
     "price_finished": 500.0,
     "image": "images/product_1_1.jpeg",
@@ -17,7 +17,7 @@
     "id": 3,
     "code": "3",
     "name": "منظم ميكب دائرى",
-    "category": "الأشكال",
+    "category": "اشكال",
     "price_without_finish": 200.0,
     "price_finished": 400.0,
     "image": "images/product_3_1.jpeg",
@@ -31,7 +31,7 @@
     "id": 4,
     "code": "4",
     "name": "منظم ميكب عادى",
-    "category": "الأشكال",
+    "category": "اشكال",
     "price_without_finish": 200.0,
     "price_finished": 400.0,
     "image": "images/product_4_1.jpeg",
@@ -45,7 +45,7 @@
     "id": 5,
     "code": "5",
     "name": "طقم رجل التنوره 3 قطع",
-    "category": "الأطقم",
+    "category": "اطقم",
     "price_without_finish": 150.0,
     "price_finished": 300.0,
     "image": "images/product_5_1.jpeg",
@@ -60,7 +60,7 @@
     "id": 6,
     "code": "6",
     "name": "البنت الافريقية",
-    "category": "الأشكال",
+    "category": "اشكال",
     "price_without_finish": 75.0,
     "price_finished": 225.0,
     "image": "images/product_6_1.jpeg",
@@ -74,7 +74,7 @@
     "id": 7,
     "code": "7",
     "name": "فازه زلط",
-    "category": "الأشكال",
+    "category": "فازات",
     "price_without_finish": 45.0,
     "price_finished": 135.0,
     "image": "images/product_7_1.jpeg",
@@ -82,6 +82,6 @@
       "images/product_7_1.jpeg"
     ],
     "stock_qty": 30.0,
-    "stock_status": "متوفر"
+    "stock_status": "نفد المخزون"
   }
 ]
