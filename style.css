@@ -1015,3 +1015,73 @@ footer {
     height: 48px;
   }
 }
+
+/* --- Catalog Tools (Search & Filter) --- */
+.catalog-tools {
+  background: #ffffff;
+  border: 1px solid #dde3ea;
+  border-radius: 18px;
+  padding: 14px;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+}
+
+.catalog-search {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 14px;
+  font-size: 15px;
+  margin-bottom: 12px;
+  background-color: #f8fafc;
+}
+
+.catalog-search:focus {
+  outline: none;
+  border-color: #1e73e8;
+  box-shadow: 0 0 0 3px rgba(30, 115, 232, 0.15);
+}
+
+.category-filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px; /* For scrollbar */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.category-filters::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.category-chip {
+  flex-shrink: 0;
+  background-color: #f1f5f9;
+  color: #334155;
+  border: 1px solid transparent;
+  border-radius: 50px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.category-chip:hover {
+  background-color: #e2e8f0;
+}
+
+.category-chip.active {
+  background-color: #0b2d4d;
+  color: white;
+  border-color: #0b2d4d;
+}
+
+@media (max-width: 600px) {
+  .category-chip {
+    padding: 10px 18px;
+    font-size: 15px;
+  }
+}
