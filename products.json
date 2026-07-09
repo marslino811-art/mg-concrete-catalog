@@ -20,7 +20,31 @@
     "images": [
       "images/product_VINEL001_1.jpg"
     ],
-    "stock_qty": 3.0,
+    "stock_qty": 5.0,
+    "stock_status": "متوفر",
+    "availability_label": "متاح الآن",
+    "availability_type": "available"
+  },
+  {
+    "id": 2,
+    "code": "VINEL002",
+    "name": "اللهم بارك هذا البيت 15*4",
+    "size": "",
+    "description": "",
+    "category": "خامات",
+    "price_mode": "single",
+    "price_options": [
+      {
+        "key": "single",
+        "label": "السعر",
+        "price": 20.0
+      }
+    ],
+    "price_without_finish": 20.0,
+    "price_finished": 0.0,
+    "image": "",
+    "images": [],
+    "stock_qty": 2.0,
     "stock_status": "متوفر",
     "availability_label": "متاح الآن",
     "availability_type": "available"
