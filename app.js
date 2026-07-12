@@ -63,6 +63,13 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function cleanForImport(value) {
+  return String(value ?? "")
+    .replace(/\|/g, "/")
+    .replace(/\r?\n/g, " ")
+    .trim();
+}
+
 function getProductImages(product) {
   const result = [];
 
@@ -411,6 +418,7 @@ function addToCartFromModal() {
     } else {
         cart.push({
             productId: product.id,
+            code: product.code || product.id,
             name: product.name,
             finish: finishLabel,
             finishNote: finishNoteText,
@@ -738,6 +746,7 @@ function addToCart(productId) {
     // If not found, add a new item to the cart
     cart.push({
       productId: product.id,
+      code: product.code || product.id,
       name: product.name,
       finish: finishLabel,
       finishNote: finishNoteText,
@@ -811,8 +820,10 @@ function buildWhatsappMessage() {
   const customerPhone = document.getElementById("customer-phone").value.trim();
   const notes = document.getElementById("order-notes").value.trim();
   const total = cart.reduce((sum, item) => sum + item.lineTotal, 0);
+  const orderCode = generateOrderNumber();
 
   let message = "طلب جديد من كتالوج MG Concrete\n\n";
+  message += `رقم الطلب: ${orderCode}\n`;
   message += `اسم العميل: ${customerName || "غير مذكور"}\n`;
   message += `رقم العميل: ${customerPhone || "غير مذكور"}\n\n`;
   message += "المنتجات:\n";
@@ -824,12 +835,29 @@ function buildWhatsappMessage() {
     message += `- النوع: ${item.finish}\n`;
     message += `- الكمية: ${item.qty}\n`;
     message += `- سعر الوحدة: ${money(item.unitPrice)}\n`;
-    message += `- إجمالي السطر: ${money(item.lineTotal)}\n\n`;
+    message += `- إجمالي السطر: ${money(item.lineTotal)}${finishNoteLine}\n\n`;
   });
 
   message += `إجمالي الطلب: ${money(total)}\n`;
   message += `ملاحظات: ${notes || "لا توجد"}\n\n`;
-  message += `ملاحظة التوفر: بعض المنتجات قد تحتاج وقت تصنيع حسب التوفر.`;
+  message += `ملاحظة التوفر: بعض المنتجات قد تحتاج وقت تصنيع حسب التوفر.\n`;
+
+  // هذا الجزء مهم للكاشير داخل برنامج MG Concrete.
+  // لا تمسحه من رسالة الواتساب، لأنه يسمح باستيراد الطلب تلقائيًا.
+  message += `\n====================\n`;
+  message += `بيانات للاستيراد في برنامج MG Concrete:\n`;
+  message += `ORDER_IMPORT_BEGIN\n`;
+  message += `ORDER_CODE|${cleanForImport(orderCode)}\n`;
+  message += `CUSTOMER|${cleanForImport(customerName || "غير مذكور")}|${cleanForImport(customerPhone || "غير مذكور")}|\n`;
+
+  cart.forEach((item) => {
+    const productCode = item.code || item.productId || item.name;
+    message += `ITEM|${cleanForImport(productCode)}|${cleanForImport(item.name)}|${cleanForImport(item.finish)}|${Number(item.qty || 0)}|${Number(item.unitPrice || 0).toFixed(2)}\n`;
+  });
+
+  message += `TOTAL|${Number(total || 0).toFixed(2)}\n`;
+  message += `NOTES|${cleanForImport(notes || "لا توجد")}\n`;
+  message += `ORDER_IMPORT_END`;
 
   return encodeURIComponent(message);
 }
