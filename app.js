@@ -15,6 +15,7 @@ let productCardQuantities = {};
 let productCardFinishes = {};
 let activeCategory = 'الكل';
 let searchTerm = '';
+let catalogCategories = [];
 
 const productsContainer = document.getElementById("products");
 const cartItemsContainer = document.getElementById("cart-items");
@@ -145,6 +146,32 @@ function normalizeProducts(list) {
   });
 }
 
+function getCatalogCategories() {
+  const preferred = [
+    'اشكال', 'اطقم', 'فازات', 'كوسترات', 'صوانى', 'مباخر', 'جارات',
+    'توزيعات اطفال', 'شغل رمضان', 'شغل شم النسيم', 'شغل عيد الاضحى',
+    'علب مناديل', 'شغل كنسى', 'فينيل', 'استيكر', 'خامات', 'الوان', 'بودر'
+  ];
+
+  const result = ['الكل'];
+  const seen = new Set(result);
+
+  const addCategory = (category) => {
+    const value = String(category || '').trim();
+    if (value && !seen.has(value)) {
+      seen.add(value);
+      result.push(value);
+    }
+  };
+
+  preferred.forEach(addCategory);
+  if (Array.isArray(catalogCategories)) {
+    catalogCategories.forEach(addCategory);
+  }
+  products.forEach(product => addCategory(product.category));
+  return result;
+}
+
 async function loadProducts() {
   try {
     const response = await fetch("products.json");
@@ -153,6 +180,19 @@ async function loadProducts() {
   } catch (error) {
     console.warn("Using fallback demo products:", error.message);
     products = normalizeProducts(fallbackProducts);
+  }
+
+  try {
+    const categoriesResponse = await fetch("categories.json");
+    if (categoriesResponse.ok) {
+      const loadedCategories = await categoriesResponse.json();
+      catalogCategories = Array.isArray(loadedCategories)
+        ? loadedCategories
+        : (Array.isArray(loadedCategories.categories) ? loadedCategories.categories : []);
+    }
+  } catch (error) {
+    console.warn("Using categories derived from products:", error.message);
+    catalogCategories = [];
   }
 
   renderFilters();
@@ -170,11 +210,7 @@ function renderFilters() {
     `;
     productsContainer.insertAdjacentHTML('beforebegin', toolsHTML);
 
-    const categories = [
-        'الكل', 'اشكال', 'اطقم', 'فازات', 'كوسترات', 'صوانى', 'مباخر',
-        'جارات', 'شغل رمضان', 'شغل شم النسيم', 'شغل عيد الاضحى',
-        'علب مناديل', 'شغل كنسى', 'خامات', 'الوان', 'بودر'
-    ];
+    const categories = getCatalogCategories();
     const filtersContainer = document.getElementById('category-filters');
     filtersContainer.innerHTML = categories.map(cat => 
         `<button type="button" class="category-chip ${cat === 'الكل' ? 'active' : ''}" data-category="${escapeHtml(cat)}">${escapeHtml(cat)}</button>`
