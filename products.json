@@ -46,10 +46,10 @@
     "images": [
       "images/no_image.png"
     ],
-    "stock_qty": 3.0,
-    "stock_status": "متوفر",
-    "availability_label": "متاح الآن",
-    "availability_type": "available"
+    "stock_qty": 0.0,
+    "stock_status": "نفد المخزون",
+    "availability_label": "يتصنع حسب الطلب",
+    "availability_type": "made_to_order"
   },
   {
     "id": 3,
@@ -77,7 +77,7 @@
     "images": [
       "images/no_image.png"
     ],
-    "stock_qty": 4.0,
+    "stock_qty": 1.0,
     "stock_status": "متوفر",
     "availability_label": "متاح الآن",
     "availability_type": "available"
@@ -108,7 +108,7 @@
     "images": [
       "images/no_image.png"
     ],
-    "stock_qty": 19.0,
+    "stock_qty": 13.0,
     "stock_status": "متوفر",
     "availability_label": "متاح الآن",
     "availability_type": "available"
@@ -135,7 +135,7 @@
       "images/no_image.png"
     ],
     "stock_qty": 10.0,
-    "stock_status": "نفد المخزون",
+    "stock_status": "متوفر",
     "availability_label": "متاح الآن",
     "availability_type": "available"
   }
