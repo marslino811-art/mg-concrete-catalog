@@ -130,12 +130,27 @@ function normalizeProducts(list) {
     const priceOptions = normalizePriceOptions(product);
     const priceMode = product.price_mode || (priceOptions.length === 1 ? "single" : "dual");
 
+    const primaryCategory = String(
+      product.primary_category || product.category || "منتجات"
+    ).trim() || "منتجات";
+
+    const categories = [...new Set(
+      [
+        primaryCategory,
+        ...(Array.isArray(product.categories) ? product.categories : [])
+      ]
+        .map((value) => String(value || "").trim())
+        .filter(Boolean)
+    )];
+
     return {
       ...product,
       id: productId,
       size: product.size || "",
       description: product.description || "",
-      category: product.category || "منتجات",
+      category: primaryCategory,
+      primary_category: primaryCategory,
+      categories,
       price_mode: priceMode,
       price_options: priceOptions,
       price_without_finish: Number(product.price_without_finish || 0),
@@ -168,8 +183,23 @@ function getCatalogCategories() {
   if (Array.isArray(catalogCategories)) {
     catalogCategories.forEach(addCategory);
   }
-  products.forEach(product => addCategory(product.category));
+  products.forEach((product) => {
+    addCategory(product.category);
+    (product.categories || []).forEach(addCategory);
+  });
   return result;
+}
+
+function productHasCategory(product, category) {
+  const wanted = String(category || '').trim();
+  return (product.categories || [product.category])
+    .some((value) => String(value || '').trim() === wanted);
+}
+
+function productCategoriesLabel(product) {
+  return (product.categories || [product.category])
+    .filter(Boolean)
+    .join(' • ');
 }
 
 async function loadProducts() {
@@ -578,7 +608,9 @@ function renderFilteredProducts() {
   let filteredProducts = products;
 
   if (activeCategory !== 'الكل') {
-      filteredProducts = filteredProducts.filter(p => p.category === activeCategory);
+      filteredProducts = filteredProducts.filter(
+        (product) => productHasCategory(product, activeCategory)
+      );
   }
 
   if (searchTerm) {
@@ -586,6 +618,9 @@ function renderFilteredProducts() {
       filteredProducts = filteredProducts.filter(p =>
           p.name.toLowerCase().includes(lowerSearchTerm) ||
           (p.category && p.category.toLowerCase().includes(lowerSearchTerm)) ||
+          ((p.categories || []).some(
+            (category) => String(category).toLowerCase().includes(lowerSearchTerm)
+          )) ||
           (p.code && String(p.code).toLowerCase().includes(lowerSearchTerm))
       );
   }
@@ -645,7 +680,7 @@ function renderFilteredProducts() {
       <div class="product-body">
         <div class="product-top">
           <div class="product-title">${escapeHtml(product.name)}</div>
-          <div class="category">${escapeHtml(product.category)}</div>
+          <div class="category">${escapeHtml(productCategoriesLabel(product))}</div>
         </div>
         ${product.description ? `<p class="product-description">${escapeHtml(product.description)}</p>` : ''}
         ${product.size ? `<div class="product-size">المقاس: ${escapeHtml(product.size)}</div>` : ''}
@@ -717,7 +752,7 @@ function openDetailsModal(productId) {
         <div class="details-info">
             <div class="details-header">
                 <div class="details-title">${escapeHtml(product.name)}</div>
-                <div class="category">${escapeHtml(product.category)}</div>
+                <div class="category">${escapeHtml(productCategoriesLabel(product))}</div>
             </div>
             
             ${product.description ? `<p class="details-description">${escapeHtml(product.description)}</p>` : ''}
