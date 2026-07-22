@@ -193,7 +193,8 @@
     "category": "اطقم",
     "primary_category": "اطقم",
     "categories": [
-      "اطقم"
+      "اطقم",
+      "فازات"
     ],
     "price_mode": "dual",
     "price_options": [
@@ -328,7 +329,8 @@
     "category": "اطقم",
     "primary_category": "اطقم",
     "categories": [
-      "اطقم"
+      "اطقم",
+      "فازات"
     ],
     "price_mode": "dual",
     "price_options": [
