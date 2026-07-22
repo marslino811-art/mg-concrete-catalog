@@ -406,5 +406,49 @@
     "availability_label": "يتصنع حسب الطلب",
     "availability_type": "made_to_order",
     "has_image": true
+  },
+  {
+    "id": 10,
+    "code": "VAS-0007",
+    "name": "فازه زلط",
+    "size": "17 سم",
+    "description": "",
+    "category": "فازات",
+    "primary_category": "فازات",
+    "categories": [
+      "فازات"
+    ],
+    "price_mode": "dual",
+    "price_options": [
+      {
+        "key": "without_finish",
+        "label": "بدون فينيش",
+        "price": 45.0
+      },
+      {
+        "key": "finished",
+        "label": "متفنش (متلون)",
+        "price": 125.0
+      }
+    ],
+    "price_without_finish": 45.0,
+    "price_finished": 125.0,
+    "image": "images/product_VAS-0007_1_b6a32b1a2f5f_card.webp",
+    "images": [
+      "images/product_VAS-0007_1_b6a32b1a2f5f_card.webp"
+    ],
+    "thumbnail_image": "images/product_VAS-0007_1_b6a32b1a2f5f_thumb.webp",
+    "thumbnail_images": [
+      "images/product_VAS-0007_1_b6a32b1a2f5f_thumb.webp"
+    ],
+    "full_image": "images/product_VAS-0007_1_b6a32b1a2f5f_full.webp",
+    "full_images": [
+      "images/product_VAS-0007_1_b6a32b1a2f5f_full.webp"
+    ],
+    "stock_qty": 0.0,
+    "stock_status": "نفد المخزون",
+    "availability_label": "يتصنع حسب الطلب",
+    "availability_type": "made_to_order",
+    "has_image": true
   }
 ]
