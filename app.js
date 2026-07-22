@@ -84,18 +84,49 @@ function cleanForImport(value) {
     .trim();
 }
 
+function withCatalogVersion(path) {
+  const value = String(path || "").trim();
+  if (!value) return "";
+
+  const version = String(
+    window.MG_CATALOG_VERSION || Date.now()
+  );
+  const separator = value.includes("?") ? "&" : "?";
+  return `${value}${separator}v=${encodeURIComponent(version)}`;
+}
+
+function versionedUniqueImages(values) {
+  return [...new Set(
+    (Array.isArray(values) ? values : [])
+      .map((value) => String(value || "").trim())
+      .filter(Boolean)
+  )].map(withCatalogVersion);
+}
+
 function getProductImages(product) {
-  const result = [];
+  const values = [];
+  // الصورة الرئيسية الخفيفة داخل الكارت دائمًا أولًا.
+  if (product.image) values.push(product.image);
+  if (Array.isArray(product.images)) values.push(...product.images);
+  return versionedUniqueImages(values);
+}
 
-  if (product.image) result.push(product.image);
-
-  if (Array.isArray(product.images)) {
-    product.images.forEach((img) => {
-      if (img) result.push(img);
-    });
+function getProductThumbnailImages(product) {
+  const values = [];
+  if (product.thumbnail_image) values.push(product.thumbnail_image);
+  if (Array.isArray(product.thumbnail_images)) {
+    values.push(...product.thumbnail_images);
   }
+  const thumbnails = versionedUniqueImages(values);
+  return thumbnails.length ? thumbnails : getProductImages(product);
+}
 
-  return [...new Set(result.map((x) => String(x).trim()).filter(Boolean))];
+function getProductFullImages(product) {
+  const values = [];
+  if (product.full_image) values.push(product.full_image);
+  if (Array.isArray(product.full_images)) values.push(...product.full_images);
+  const fullImages = versionedUniqueImages(values);
+  return fullImages.length ? fullImages : getProductImages(product);
 }
 
 function normalizePriceOptions(product) {
@@ -139,6 +170,8 @@ function normalizeProducts(list) {
   return (Array.isArray(list) ? list : []).map((product, index) => {
     const productId = product.id ?? product.code ?? index + 1;
     const images = getProductImages(product);
+    const thumbnailImages = getProductThumbnailImages(product);
+    const fullImages = getProductFullImages(product);
 
     const priceOptions = normalizePriceOptions(product);
     const priceMode = product.price_mode || (priceOptions.length === 1 ? "single" : "dual");
@@ -169,7 +202,11 @@ function normalizeProducts(list) {
       price_without_finish: Number(product.price_without_finish || 0),
       price_finished: Number(product.price_finished || 0),
       image: images[0] || "",
-      images
+      images,
+      thumbnail_image: thumbnailImages[0] || images[0] || "",
+      thumbnail_images: thumbnailImages,
+      full_image: fullImages[0] || images[0] || "",
+      full_images: fullImages
     };
   });
 }
@@ -334,7 +371,7 @@ function initImageModal() {
             <span class="image-modal-close" id="image-modal-close">&times;</span>
             <button type="button" class="image-modal-nav prev" id="image-modal-prev" aria-label="Previous">‹</button>
             <div class="image-modal-content">
-                <img src="" alt="Product Image" class="image-modal-img" id="image-modal-img">
+                <img src="" alt="Product Image" class="image-modal-img" id="image-modal-img" decoding="async">
             </div>
             <button type="button" class="image-modal-nav next" id="image-modal-next" aria-label="Next">›</button>
             <div class="image-modal-counter" id="image-modal-counter"></div>
@@ -373,7 +410,7 @@ function closeImageModal() {
 
 function updateImageModal() {
     if (!currentModalProduct) return;
-    const images = getProductImages(currentModalProduct);
+    const images = getProductFullImages(currentModalProduct);
     if (images.length === 0) {
         closeImageModal();
         return;
@@ -382,6 +419,7 @@ function updateImageModal() {
     modalImg.src = images[currentModalImageIndex];
     if (images.length > 1) {
         modalCounter.textContent = `${currentModalImageIndex + 1} / ${images.length}`;
+        modalCounter.setAttribute("dir", "ltr");
         modalCounter.style.display = 'block';
         modalNextBtn.style.display = 'block';
         modalPrevBtn.style.display = 'block';
@@ -394,7 +432,7 @@ function updateImageModal() {
 
 function changeModalImage(direction) {
     if (!currentModalProduct) return;
-    const images = getProductImages(currentModalProduct);
+    const images = getProductFullImages(currentModalProduct);
     if (images.length <= 1) return;
     currentModalImageIndex = (currentModalImageIndex + direction + images.length) % images.length;
     updateImageModal();
@@ -443,7 +481,7 @@ function closeDetailsModal() {
 
 function changeDetailsModalImage(direction) {
     if (!currentDetailsProduct) return;
-    const images = getProductImages(currentDetailsProduct);
+    const images = getProductFullImages(currentDetailsProduct);
     if (images.length <= 1) return;
     
     modalProductState.imageIndex = (modalProductState.imageIndex + direction + images.length) % images.length;
@@ -452,7 +490,10 @@ function changeDetailsModalImage(direction) {
     const counterEl = document.getElementById('details-modal-counter');
     
     if (imgEl) imgEl.src = images[modalProductState.imageIndex];
-    if (counterEl) counterEl.textContent = `${modalProductState.imageIndex + 1} / ${images.length}`;
+    if (counterEl) {
+        counterEl.textContent = `${modalProductState.imageIndex + 1} / ${images.length}`;
+        counterEl.setAttribute("dir", "ltr");
+    }
 }
 
 function changeDetailsModalQuantity(change) {
@@ -562,6 +603,7 @@ function updateProductImage(productId) {
 
   if (counterEl) {
     counterEl.textContent = `${index + 1} / ${images.length}`;
+    counterEl.setAttribute("dir", "ltr");
   }
 
   document.querySelectorAll(`[data-thumb-product="${product.id}"]`).forEach((thumb) => {
@@ -670,6 +712,7 @@ function renderFilteredProducts() {
 
   filteredProducts.forEach((product) => {
     const images = getProductImages(product);
+    const thumbnailImages = getProductThumbnailImages(product);
     const currentImage = images[0] || "";
     productImageIndexes[product.id] = 0;
     productCardQuantities[product.id] = 1;
@@ -679,7 +722,7 @@ function renderFilteredProducts() {
     const galleryButtons = images.length > 1 ? `
       <button type="button" class="gallery-nav gallery-prev" onclick="changeProductImage('${product.id}', -1)" aria-label="الصورة السابقة">‹</button>
       <button type="button" class="gallery-nav gallery-next" onclick="changeProductImage('${product.id}', 1)" aria-label="الصورة التالية">›</button>
-      <div class="image-counter" id="image-counter-${product.id}">1 / ${images.length}</div>
+      <div class="image-counter" dir="ltr" id="image-counter-${product.id}">1 / ${images.length}</div>
     ` : "";
 
     const thumbnails = images.length > 1 ? `
@@ -690,7 +733,7 @@ function renderFilteredProducts() {
                   data-thumb-product="${product.id}"
                   data-thumb-index="${index}"
                   onclick="chooseProductImage('${product.id}', ${index})">
-            <img src="${escapeHtml(img)}" alt="صورة ${index + 1}" onerror="this.style.display='none';" />
+            <img loading="lazy" decoding="async" fetchpriority="low" width="180" height="180" src="${escapeHtml(thumbnailImages[index] || img)}" alt="صورة ${index + 1}" onerror="this.style.display='none';" />
           </button>
         `).join("")}
       </div>
@@ -709,7 +752,7 @@ function renderFilteredProducts() {
     card.innerHTML = `
       <div class="product-image">
         ${currentImage ? `
-          <img id="product-img-${product.id}" src="${escapeHtml(currentImage)}" alt="${escapeHtml(product.name)}" onclick="openImageModal('${product.id}')" onerror="this.style.display='none'; document.getElementById('placeholder-${product.id}').style.display='grid';" />
+          <img id="product-img-${product.id}" loading="lazy" decoding="async" width="900" height="900" src="${escapeHtml(currentImage)}" alt="${escapeHtml(product.name)}" onclick="openImageModal('${product.id}')" onerror="this.style.display='none'; document.getElementById('placeholder-${product.id}').style.display='grid';" />
           <div class="placeholder" id="placeholder-${product.id}" style="display:none;" onclick="openImageModal('${product.id}')">صورة المنتج</div>
         ` : `
           <img id="product-img-${product.id}" src="" alt="${escapeHtml(product.name)}" style="display:none;" />
@@ -759,13 +802,13 @@ function openDetailsModal(productId) {
     modalProductState.imageIndex = 0;
     modalProductState.finish = (product.price_options && product.price_options[0]) ? product.price_options[0].key : 'single';
 
-    const images = getProductImages(product);
+    const images = getProductFullImages(product);
     const currentImage = images[0] || "";
 
     const galleryButtons = images.length > 1 ? `
       <button type="button" class="gallery-nav gallery-prev" onclick="changeDetailsModalImage(-1)" aria-label="الصورة السابقة">‹</button>
       <button type="button" class="gallery-nav gallery-next" onclick="changeDetailsModalImage(1)" aria-label="الصورة التالية">›</button>
-      <div class="image-counter" id="details-modal-counter">1 / ${images.length}</div>
+      <div class="image-counter" dir="ltr" id="details-modal-counter">1 / ${images.length}</div>
     ` : "";
     
     const priceBoxesHTML = (product.price_options || []).map(option => `
@@ -782,7 +825,7 @@ function openDetailsModal(productId) {
         <div class="details-gallery">
             <div class="details-main-image">
                 ${currentImage ? `
-                    <img id="details-modal-img" src="${escapeHtml(currentImage)}" alt="${escapeHtml(product.name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
+                    <img id="details-modal-img" decoding="async" src="${escapeHtml(currentImage)}" alt="${escapeHtml(product.name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
                     <div class="placeholder" style="display:none;">صورة المنتج</div>
                 ` : `
                     <div class="placeholder">صورة المنتج</div>

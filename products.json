@@ -25,9 +25,17 @@
     ],
     "price_without_finish": 10.0,
     "price_finished": 30.0,
-    "image": "images/product_VAS-0001_1.jpg",
+    "image": "images/product_VAS-0001_1_661a70ae245c_card.webp",
     "images": [
-      "images/product_VAS-0001_1.jpg"
+      "images/product_VAS-0001_1_661a70ae245c_card.webp"
+    ],
+    "thumbnail_image": "images/product_VAS-0001_1_661a70ae245c_thumb.webp",
+    "thumbnail_images": [
+      "images/product_VAS-0001_1_661a70ae245c_thumb.webp"
+    ],
+    "full_image": "images/product_VAS-0001_1_661a70ae245c_full.webp",
+    "full_images": [
+      "images/product_VAS-0001_1_661a70ae245c_full.webp"
     ],
     "stock_qty": 0.0,
     "stock_status": "نفد المخزون",
@@ -61,10 +69,20 @@
     ],
     "price_without_finish": 125.0,
     "price_finished": 375.0,
-    "image": "images/product_VAS-0002_1.jpg",
+    "image": "images/product_VAS-0002_1_d22a2e9eae10_card.webp",
     "images": [
-      "images/product_VAS-0002_1.jpg",
-      "images/product_VAS-0002_2.jpg"
+      "images/product_VAS-0002_1_d22a2e9eae10_card.webp",
+      "images/product_VAS-0002_2_284cd778fbb0_card.webp"
+    ],
+    "thumbnail_image": "images/product_VAS-0002_1_d22a2e9eae10_thumb.webp",
+    "thumbnail_images": [
+      "images/product_VAS-0002_1_d22a2e9eae10_thumb.webp",
+      "images/product_VAS-0002_2_284cd778fbb0_thumb.webp"
+    ],
+    "full_image": "images/product_VAS-0002_1_d22a2e9eae10_full.webp",
+    "full_images": [
+      "images/product_VAS-0002_1_d22a2e9eae10_full.webp",
+      "images/product_VAS-0002_2_284cd778fbb0_full.webp"
     ],
     "stock_qty": 0.0,
     "stock_status": "نفد المخزون",
@@ -98,10 +116,20 @@
     ],
     "price_without_finish": 100.0,
     "price_finished": 300.0,
-    "image": "images/product_VAS-0003_1.jpg",
+    "image": "images/product_VAS-0003_1_55635f2639b3_card.webp",
     "images": [
-      "images/product_VAS-0003_1.jpg",
-      "images/product_VAS-0003_2.jpg"
+      "images/product_VAS-0003_1_55635f2639b3_card.webp",
+      "images/product_VAS-0003_2_45d4299be609_card.webp"
+    ],
+    "thumbnail_image": "images/product_VAS-0003_1_55635f2639b3_thumb.webp",
+    "thumbnail_images": [
+      "images/product_VAS-0003_1_55635f2639b3_thumb.webp",
+      "images/product_VAS-0003_2_45d4299be609_thumb.webp"
+    ],
+    "full_image": "images/product_VAS-0003_1_55635f2639b3_full.webp",
+    "full_images": [
+      "images/product_VAS-0003_1_55635f2639b3_full.webp",
+      "images/product_VAS-0003_2_45d4299be609_full.webp"
     ],
     "stock_qty": 0.0,
     "stock_status": "نفد المخزون",
@@ -135,10 +163,20 @@
     ],
     "price_without_finish": 75.0,
     "price_finished": 225.0,
-    "image": "images/product_VAS-0004_1.jpg",
+    "image": "images/product_VAS-0004_1_9839842c4a89_card.webp",
     "images": [
-      "images/product_VAS-0004_1.jpg",
-      "images/product_VAS-0004_2.jpg"
+      "images/product_VAS-0004_1_9839842c4a89_card.webp",
+      "images/product_VAS-0004_2_417366e8ad05_card.webp"
+    ],
+    "thumbnail_image": "images/product_VAS-0004_1_9839842c4a89_thumb.webp",
+    "thumbnail_images": [
+      "images/product_VAS-0004_1_9839842c4a89_thumb.webp",
+      "images/product_VAS-0004_2_417366e8ad05_thumb.webp"
+    ],
+    "full_image": "images/product_VAS-0004_1_9839842c4a89_full.webp",
+    "full_images": [
+      "images/product_VAS-0004_1_9839842c4a89_full.webp",
+      "images/product_VAS-0004_2_417366e8ad05_full.webp"
     ],
     "stock_qty": 0.0,
     "stock_status": "نفد المخزون",
@@ -172,10 +210,20 @@
     ],
     "price_without_finish": 200.0,
     "price_finished": 600.0,
-    "image": "images/product_SET-0001_1.jpg",
+    "image": "images/product_SET-0001_1_b610ed4731be_card.webp",
     "images": [
-      "images/product_SET-0001_1.jpg",
-      "images/product_SET-0001_2.jpg"
+      "images/product_SET-0001_1_b610ed4731be_card.webp",
+      "images/product_SET-0001_2_1221a1156d07_card.webp"
+    ],
+    "thumbnail_image": "images/product_SET-0001_1_b610ed4731be_thumb.webp",
+    "thumbnail_images": [
+      "images/product_SET-0001_1_b610ed4731be_thumb.webp",
+      "images/product_SET-0001_2_1221a1156d07_thumb.webp"
+    ],
+    "full_image": "images/product_SET-0001_1_b610ed4731be_full.webp",
+    "full_images": [
+      "images/product_SET-0001_1_b610ed4731be_full.webp",
+      "images/product_SET-0001_2_1221a1156d07_full.webp"
     ],
     "stock_qty": 0.0,
     "stock_status": "نفد المخزون",
