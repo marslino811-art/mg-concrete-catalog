@@ -17,6 +17,19 @@ let activeCategory = 'الكل';
 let searchTerm = '';
 let catalogCategories = [];
 
+// نسخة موحدة لكل ملفات الكتالوج. لو فتح البرنامج الرابط مع ?v=...
+// تُستخدم نفس النسخة في JSON، وبذلك لا يعرض المتصفح بيانات قديمة.
+const CATALOG_VERSION = String(
+  window.MG_CATALOG_VERSION ||
+  new URLSearchParams(window.location.search).get("v") ||
+  Date.now()
+);
+
+function catalogDataUrl(filename) {
+  const separator = String(filename).includes("?") ? "&" : "?";
+  return `${filename}${separator}v=${encodeURIComponent(CATALOG_VERSION)}`;
+}
+
 const productsContainer = document.getElementById("products");
 const cartItemsContainer = document.getElementById("cart-items");
 const cartCount = document.getElementById("cart-count");
@@ -203,17 +216,37 @@ function productCategoriesLabel(product) {
 }
 
 async function loadProducts() {
+  products = [];
+  catalogCategories = [];
+
   try {
-    const response = await fetch("products.json");
-    if (!response.ok) throw new Error("products.json not loaded");
-    products = normalizeProducts(await response.json());
+    const response = await fetch(catalogDataUrl("products.json"), {
+      cache: "no-store",
+      headers: { "Cache-Control": "no-cache" }
+    });
+    if (!response.ok) {
+      throw new Error(`products.json not loaded (${response.status})`);
+    }
+
+    const loadedProducts = await response.json();
+    if (!Array.isArray(loadedProducts)) {
+      throw new Error("products.json must contain a product list");
+    }
+
+    products = normalizeProducts(loadedProducts);
+    console.info(`MG Concrete catalog loaded ${products.length} products.`);
   } catch (error) {
-    console.warn("Using fallback demo products:", error.message);
-    products = normalizeProducts(fallbackProducts);
+    // لا نعرض منتجات تجريبية أو قديمة عند فشل التحميل؛ لأن ذلك قد يسبب
+    // ظهور منتجات غير موجودة فعليًا في برنامج MG Concrete.
+    console.error("Catalog products load failed:", error);
+    products = [];
   }
 
   try {
-    const categoriesResponse = await fetch("categories.json");
+    const categoriesResponse = await fetch(catalogDataUrl("categories.json"), {
+      cache: "no-store",
+      headers: { "Cache-Control": "no-cache" }
+    });
     if (categoriesResponse.ok) {
       const loadedCategories = await categoriesResponse.json();
       catalogCategories = Array.isArray(loadedCategories)
@@ -626,6 +659,14 @@ function renderFilteredProducts() {
   }
 
   productsContainer.innerHTML = "";
+
+  if (filteredProducts.length === 0) {
+    const message = products.length === 0
+      ? "تعذر تحميل المنتجات حاليًا. أعد فتح رابط الكتالوج بعد اكتمال النشر."
+      : "لا توجد منتجات مطابقة للبحث أو التصنيف المحدد.";
+    productsContainer.innerHTML = `<div class="catalog-empty-state">${escapeHtml(message)}</div>`;
+    return;
+  }
 
   filteredProducts.forEach((product) => {
     const images = getProductImages(product);

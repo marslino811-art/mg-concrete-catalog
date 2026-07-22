@@ -1537,3 +1537,19 @@ footer {
     border-radius: 15px !important;
   }
 }
+
+
+/* رسالة واضحة بدل ترك مساحة فارغة لو فشل تحميل JSON أو لا توجد نتائج */
+.catalog-empty-state {
+  grid-column: 1 / -1;
+  width: 100%;
+  background: #ffffff;
+  color: #0b2d4d;
+  border: 1px dashed #94a3b8;
+  border-radius: 18px;
+  padding: 28px 18px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.8;
+}

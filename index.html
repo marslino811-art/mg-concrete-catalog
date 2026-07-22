@@ -4,7 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MG Concrete Catalog</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <script>
+    window.MG_CATALOG_VERSION = String(
+      new URLSearchParams(window.location.search).get("v") || Date.now()
+    );
+    const catalogStyle = document.createElement("link");
+    catalogStyle.rel = "stylesheet";
+    catalogStyle.href = `style.css?v=${encodeURIComponent(window.MG_CATALOG_VERSION)}`;
+    document.head.appendChild(catalogStyle);
+  </script>
 </head>
 <body>
   <header class="site-header">
@@ -63,7 +74,25 @@
     <p>MG Concrete © كتالوج المنتجات والطلبات</p>
   </footer>
 
-  <script src="app.js"></script>
-  <script src="quantity_editor.js"></script>
+  <script>
+    (function loadCatalogScripts() {
+      const version = encodeURIComponent(window.MG_CATALOG_VERSION || Date.now());
+
+      function loadScript(source, onLoad) {
+        const script = document.createElement("script");
+        script.src = `${source}?v=${version}`;
+        script.onload = onLoad || null;
+        script.onerror = function () {
+          console.error(`Failed to load ${source}`);
+        };
+        document.body.appendChild(script);
+      }
+
+      // app.js أولًا، ثم ملف تعديل الكمية لأنه يعتمد على عناصر الكتالوج.
+      loadScript("app.js", function () {
+        loadScript("quantity_editor.js");
+      });
+    })();
+  </script>
 </body>
 </html>
