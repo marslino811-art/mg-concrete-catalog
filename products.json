@@ -230,5 +230,181 @@
     "availability_label": "يتصنع حسب الطلب",
     "availability_type": "made_to_order",
     "has_image": true
+  },
+  {
+    "id": 6,
+    "code": "VAS-0005",
+    "name": "فازه حرف N",
+    "size": "22 سم",
+    "description": "",
+    "category": "فازات",
+    "primary_category": "فازات",
+    "categories": [
+      "فازات"
+    ],
+    "price_mode": "dual",
+    "price_options": [
+      {
+        "key": "without_finish",
+        "label": "بدون فينيش",
+        "price": 100.0
+      },
+      {
+        "key": "finished",
+        "label": "متفنش (متلون)",
+        "price": 300.0
+      }
+    ],
+    "price_without_finish": 100.0,
+    "price_finished": 300.0,
+    "image": "images/product_VAS-0005_1_fd93b77614b5_card.webp",
+    "images": [
+      "images/product_VAS-0005_1_fd93b77614b5_card.webp"
+    ],
+    "thumbnail_image": "images/product_VAS-0005_1_fd93b77614b5_thumb.webp",
+    "thumbnail_images": [
+      "images/product_VAS-0005_1_fd93b77614b5_thumb.webp"
+    ],
+    "full_image": "images/product_VAS-0005_1_fd93b77614b5_full.webp",
+    "full_images": [
+      "images/product_VAS-0005_1_fd93b77614b5_full.webp"
+    ],
+    "stock_qty": 0.0,
+    "stock_status": "نفد المخزون",
+    "availability_label": "يتصنع حسب الطلب",
+    "availability_type": "made_to_order",
+    "has_image": true
+  },
+  {
+    "id": 7,
+    "code": "VAS-0006",
+    "name": "فازه حرف O",
+    "size": "17 سم",
+    "description": "",
+    "category": "فازات",
+    "primary_category": "فازات",
+    "categories": [
+      "فازات"
+    ],
+    "price_mode": "dual",
+    "price_options": [
+      {
+        "key": "without_finish",
+        "label": "بدون فينيش",
+        "price": 75.0
+      },
+      {
+        "key": "finished",
+        "label": "متفنش (متلون)",
+        "price": 225.0
+      }
+    ],
+    "price_without_finish": 75.0,
+    "price_finished": 225.0,
+    "image": "images/product_VAS-0006_1_b2a450bafe87_card.webp",
+    "images": [
+      "images/product_VAS-0006_1_b2a450bafe87_card.webp"
+    ],
+    "thumbnail_image": "images/product_VAS-0006_1_b2a450bafe87_thumb.webp",
+    "thumbnail_images": [
+      "images/product_VAS-0006_1_b2a450bafe87_thumb.webp"
+    ],
+    "full_image": "images/product_VAS-0006_1_b2a450bafe87_full.webp",
+    "full_images": [
+      "images/product_VAS-0006_1_b2a450bafe87_full.webp"
+    ],
+    "stock_qty": 0.0,
+    "stock_status": "نفد المخزون",
+    "availability_label": "يتصنع حسب الطلب",
+    "availability_type": "made_to_order",
+    "has_image": true
+  },
+  {
+    "id": 8,
+    "code": "SET-0002",
+    "name": "طقم حرف NO",
+    "size": "22 سم /17 سم",
+    "description": "",
+    "category": "اطقم",
+    "primary_category": "اطقم",
+    "categories": [
+      "اطقم"
+    ],
+    "price_mode": "dual",
+    "price_options": [
+      {
+        "key": "without_finish",
+        "label": "بدون فينيش",
+        "price": 150.0
+      },
+      {
+        "key": "finished",
+        "label": "متفنش (متلون)",
+        "price": 350.0
+      }
+    ],
+    "price_without_finish": 150.0,
+    "price_finished": 350.0,
+    "image": "images/product_SET-0002_1_d1ad47684b3d_card.webp",
+    "images": [
+      "images/product_SET-0002_1_d1ad47684b3d_card.webp"
+    ],
+    "thumbnail_image": "images/product_SET-0002_1_d1ad47684b3d_thumb.webp",
+    "thumbnail_images": [
+      "images/product_SET-0002_1_d1ad47684b3d_thumb.webp"
+    ],
+    "full_image": "images/product_SET-0002_1_d1ad47684b3d_full.webp",
+    "full_images": [
+      "images/product_SET-0002_1_d1ad47684b3d_full.webp"
+    ],
+    "stock_qty": 0.0,
+    "stock_status": "نفد المخزون",
+    "availability_label": "يتصنع حسب الطلب",
+    "availability_type": "made_to_order",
+    "has_image": true
+  },
+  {
+    "id": 9,
+    "code": "SHP-0001",
+    "name": "البنت الافريقية",
+    "size": "22 سم",
+    "description": "",
+    "category": "اشكال",
+    "primary_category": "اشكال",
+    "categories": [
+      "اشكال"
+    ],
+    "price_mode": "dual",
+    "price_options": [
+      {
+        "key": "without_finish",
+        "label": "بدون فينيش",
+        "price": 75.0
+      },
+      {
+        "key": "finished",
+        "label": "متفنش (متلون)",
+        "price": 250.0
+      }
+    ],
+    "price_without_finish": 75.0,
+    "price_finished": 250.0,
+    "image": "images/product_SHP-0001_1_1c0e94489477_card.webp",
+    "images": [
+      "images/product_SHP-0001_1_1c0e94489477_card.webp"
+    ],
+    "thumbnail_image": "images/product_SHP-0001_1_1c0e94489477_thumb.webp",
+    "thumbnail_images": [
+      "images/product_SHP-0001_1_1c0e94489477_thumb.webp"
+    ],
+    "full_image": "images/product_SHP-0001_1_1c0e94489477_full.webp",
+    "full_images": [
+      "images/product_SHP-0001_1_1c0e94489477_full.webp"
+    ],
+    "stock_qty": 0.0,
+    "stock_status": "نفد المخزون",
+    "availability_label": "يتصنع حسب الطلب",
+    "availability_type": "made_to_order",
+    "has_image": true
   }
 ]
