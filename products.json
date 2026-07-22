@@ -25,9 +25,157 @@
     ],
     "price_without_finish": 10.0,
     "price_finished": 30.0,
-    "image": "images/product_VAS-0001_1.jpeg",
+    "image": "images/product_VAS-0001_1.jpg",
     "images": [
-      "images/product_VAS-0001_1.jpeg"
+      "images/product_VAS-0001_1.jpg"
+    ],
+    "stock_qty": 0.0,
+    "stock_status": "نفد المخزون",
+    "availability_label": "يتصنع حسب الطلب",
+    "availability_type": "made_to_order",
+    "has_image": true
+  },
+  {
+    "id": 2,
+    "code": "VAS-0002",
+    "name": "فازه بوهيمى كبيره",
+    "size": "30 سم",
+    "description": "",
+    "category": "فازات",
+    "primary_category": "فازات",
+    "categories": [
+      "فازات"
+    ],
+    "price_mode": "dual",
+    "price_options": [
+      {
+        "key": "without_finish",
+        "label": "بدون فينيش",
+        "price": 125.0
+      },
+      {
+        "key": "finished",
+        "label": "متفنش (متلون)",
+        "price": 375.0
+      }
+    ],
+    "price_without_finish": 125.0,
+    "price_finished": 375.0,
+    "image": "images/product_VAS-0002_1.jpg",
+    "images": [
+      "images/product_VAS-0002_1.jpg",
+      "images/product_VAS-0002_2.jpg"
+    ],
+    "stock_qty": 0.0,
+    "stock_status": "نفد المخزون",
+    "availability_label": "يتصنع حسب الطلب",
+    "availability_type": "made_to_order",
+    "has_image": true
+  },
+  {
+    "id": 3,
+    "code": "VAS-0003",
+    "name": "فازه بوهيمى وسط",
+    "size": "23 سم",
+    "description": "",
+    "category": "فازات",
+    "primary_category": "فازات",
+    "categories": [
+      "فازات"
+    ],
+    "price_mode": "dual",
+    "price_options": [
+      {
+        "key": "without_finish",
+        "label": "بدون فينيش",
+        "price": 100.0
+      },
+      {
+        "key": "finished",
+        "label": "متفنش (متلون)",
+        "price": 300.0
+      }
+    ],
+    "price_without_finish": 100.0,
+    "price_finished": 300.0,
+    "image": "images/product_VAS-0003_1.jpg",
+    "images": [
+      "images/product_VAS-0003_1.jpg",
+      "images/product_VAS-0003_2.jpg"
+    ],
+    "stock_qty": 0.0,
+    "stock_status": "نفد المخزون",
+    "availability_label": "يتصنع حسب الطلب",
+    "availability_type": "made_to_order",
+    "has_image": true
+  },
+  {
+    "id": 4,
+    "code": "VAS-0004",
+    "name": "فازه بوهيمى صغيره",
+    "size": "17 سم",
+    "description": "",
+    "category": "فازات",
+    "primary_category": "فازات",
+    "categories": [
+      "فازات"
+    ],
+    "price_mode": "dual",
+    "price_options": [
+      {
+        "key": "without_finish",
+        "label": "بدون فينيش",
+        "price": 75.0
+      },
+      {
+        "key": "finished",
+        "label": "متفنش (متلون)",
+        "price": 225.0
+      }
+    ],
+    "price_without_finish": 75.0,
+    "price_finished": 225.0,
+    "image": "images/product_VAS-0004_1.jpg",
+    "images": [
+      "images/product_VAS-0004_1.jpg",
+      "images/product_VAS-0004_2.jpg"
+    ],
+    "stock_qty": 0.0,
+    "stock_status": "نفد المخزون",
+    "availability_label": "يتصنع حسب الطلب",
+    "availability_type": "made_to_order",
+    "has_image": true
+  },
+  {
+    "id": 5,
+    "code": "SET-0001",
+    "name": "طقم فازات بوهيمى",
+    "size": "30سم 23سم 17 سم",
+    "description": "",
+    "category": "اطقم",
+    "primary_category": "اطقم",
+    "categories": [
+      "اطقم"
+    ],
+    "price_mode": "dual",
+    "price_options": [
+      {
+        "key": "without_finish",
+        "label": "بدون فينيش",
+        "price": 200.0
+      },
+      {
+        "key": "finished",
+        "label": "متفنش (متلون)",
+        "price": 600.0
+      }
+    ],
+    "price_without_finish": 200.0,
+    "price_finished": 600.0,
+    "image": "images/product_SET-0001_1.jpg",
+    "images": [
+      "images/product_SET-0001_1.jpg",
+      "images/product_SET-0001_2.jpg"
     ],
     "stock_qty": 0.0,
     "stock_status": "نفد المخزون",
